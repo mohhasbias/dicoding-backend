@@ -1,0 +1,28 @@
+{
+    "name": "forum-api",
+    "version": "1.0.0",
+    "description": "Clean Architecture Elements in NodeJS",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "test": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
+        "prettier": "prettier --write .",
+        "knex": "knex",
+        "migrate:up": "knex --knexfile src/infrastructures/db/knexfile.js migrate:up",
+        "migrate:rollback": "knex --knexfile src/infrastructures/db/knexfile.js migrate:rollback"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@hapi/hapi": "^20.2.1",
+        "crypto-js": "^4.1.1",
+        "dotenv": "^10.0.0",
+        "joi": "^17.4.2",
+        "knex": "^0.95.14",
+        "nanoid": "^3.1.30",
+        "pg": "^8.7.1",
+        "prettier": "^2.4.1",
+        "winston": "^3.3.3"
+    }
+}
