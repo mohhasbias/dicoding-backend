@@ -7,7 +7,8 @@ const isUserExist =
 
         try {
             logger.info('checking if user exist');
-            const result = await db.user()
+            const result = await db
+                .user()
                 .where({
                     username,
                 })

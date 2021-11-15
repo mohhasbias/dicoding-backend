@@ -1,8 +1,4 @@
-const sha256 = require('crypto-js/sha256');
-const { nanoid } = require('nanoid');
-
-const hash = (msg) => sha256(msg);
-const generateID = async (len) => nanoid(len);
+const { hash, generateID } = require('./utils');
 
 const insertUser =
     ({ db, logger }) =>
@@ -14,7 +10,8 @@ const insertUser =
         try {
             const id = await generateID();
             logger.info('inserting to database with id: ' + id);
-            const result = await db.user()
+            const result = await db
+                .user()
                 .insert({
                     id,
                     username,

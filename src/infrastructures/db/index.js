@@ -13,4 +13,7 @@ knex.on('query-error', function (error, obj) {
 
 module.exports = {
     user: () => knex('USERS'),
+    authentications: () => knex('AUTHENTICATIONS'),
+    threads: () => knex('THREADS'),
+    comments: () => knex('COMMENTS'),
 };

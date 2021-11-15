@@ -1,7 +1,7 @@
-const logger = require('../infrastructures/logger');
 const addUser = require('../use-cases/add-user');
 
 const postUser = (services) => async (req, h) => {
+    const { logger } = services;
     logger.info('interfaces: post user');
     const addedUser = await addUser(req.payload, services);
 

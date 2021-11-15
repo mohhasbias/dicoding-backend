@@ -6,7 +6,9 @@ const addUser = async (user, { db, logger }) => {
     try {
         validatedUser = newUser(user);
     } catch (err) {
-        const e = new Error('tidak dapat membuat user baru karena ' + err.details[0].message)
+        const e = new Error(
+            'tidak dapat membuat user baru karena ' + err.details[0].message
+        );
         e.isJoi = true;
         throw e;
     }

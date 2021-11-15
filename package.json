@@ -7,17 +7,20 @@
         "start": "node src/index.js",
         "test": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
         "prettier": "prettier --write .",
-        "knex": "knex",
-        "migrate:up": "knex --knexfile src/infrastructures/db/knexfile.js migrate:up",
-        "migrate:rollback": "knex --knexfile src/infrastructures/db/knexfile.js migrate:rollback"
+        "migrate:make": "knex --knexfile src/infrastructures/db/knexfile.js migrate:make",
+        "migrate:up": "env-cmd knex --knexfile src/infrastructures/db/knexfile.js migrate:up",
+        "migrate:rollback": "env-cmd knex --knexfile src/infrastructures/db/knexfile.js migrate:rollback",
+        "create-key": "node -p \"require('crypto').randomBytes(64).toString('hex');\""
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@hapi/hapi": "^20.2.1",
+        "@hapi/jwt": "^2.1.0",
         "crypto-js": "^4.1.1",
         "dotenv": "^10.0.0",
+        "env-cmd": "^10.1.0",
         "joi": "^17.4.2",
         "knex": "^0.95.14",
         "nanoid": "^3.1.30",
