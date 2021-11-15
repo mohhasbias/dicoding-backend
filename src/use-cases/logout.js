@@ -1,16 +1,16 @@
-const { generateAccessToken, generateRefreshToken } = require('./utils');
+const { generateAccessToken, generateRefreshToken } = require('./_utils');
 
-const logout = async (refreshToken, { db, logger }) => {
+const logout = ({ isTokenExist, removeRefreshToken, logger }) => async (refreshToken) => {
     logger.info('use cases: logout');
 
-    const isTokenExist = await db.isTokenExist(refreshToken);
-    if (!isTokenExist) {
+    const isExist = await isTokenExist(refreshToken);
+    if (!isExist) {
         const err = new Error('refresh token tidak ditemukan di database');
         err.isAuthError = true;
         throw err;
     }
 
-    db.removeRefreshToken(refreshToken);
+    removeRefreshToken(refreshToken);
 
     return {
         loggedOut: true,

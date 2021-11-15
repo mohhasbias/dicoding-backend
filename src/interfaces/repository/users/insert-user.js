@@ -1,4 +1,4 @@
-const { hash, generateID } = require('./utils');
+const { hash, generateID } = require('../../_utils');
 
 const insertUser =
     ({ db, logger }) =>

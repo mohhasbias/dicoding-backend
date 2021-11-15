@@ -57,6 +57,8 @@ const createServer = async (
                 logger.error('isDB: ' + response.detail);
                 const codes = {
                     'Thread tidak exist': 404,
+                    'Comment tidak exist': 404,
+                    'Invalid comment owner': 403,
                 };
                 console.error(response);
                 return h

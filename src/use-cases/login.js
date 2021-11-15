@@ -1,8 +1,8 @@
-const { generateAccessToken, generateRefreshToken } = require('./utils');
+const { generateAccessToken, generateRefreshToken } = require('./_utils');
 
-const login = async (user, { db, logger }) => {
+const login = ({verifyUser, addRefreshToken, logger}) => async (user) => {
     logger.info('use cases: login');
-    const { isVerified: isVerifiedUser, id } = await db.verifyUser(user);
+    const { isVerified: isVerifiedUser, id } = await verifyUser(user);
     if (!isVerifiedUser) {
         const e = new Error('Invalid Username or Password');
         e.isAuthError = true;
@@ -12,7 +12,7 @@ const login = async (user, { db, logger }) => {
     const accessToken = generateAccessToken({ id });
     const refreshToken = generateRefreshToken({ id });
 
-    db.addRefreshToken(refreshToken);
+    addRefreshToken(refreshToken);
 
     return {
         accessToken,

@@ -1,4 +1,4 @@
-const addThreadComment = require('../use-cases/add-thread-comment');
+const addThreadComment = require('../../use-cases/add-thread-comment');
 
 const postThreadComment = (services) => async (req, h) => {
     const { logger } = services;

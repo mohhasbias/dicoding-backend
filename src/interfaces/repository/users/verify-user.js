@@ -1,4 +1,4 @@
-const { hash } = require('./utils');
+const { hash } = require('../../_utils');
 
 const verifyUser =
     ({ db, logger }) =>

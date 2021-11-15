@@ -1,16 +1,20 @@
+// entities 
 const newThread = require('../entities/thread');
 
-const addThread = async (owner, thread, { db, logger }) => {
-    logger.info('use cases: add thread');
+// use case
+const addThread =
+    ({ insertThread, logger }) =>
+    async (owner, thread) => {
+        logger.info('use cases: add thread');
 
-    const validatedThread = newThread({
-        owner,
-        ...thread,
-    });
+        const validatedThread = newThread({
+            owner,
+            ...thread,
+        });
 
-    const addedThread = await db.insertThread(validatedThread);
+        const addedThread = await insertThread(validatedThread);
 
-    return addedThread;
-};
+        return addedThread;
+    };
 
 module.exports = addThread;

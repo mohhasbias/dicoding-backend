@@ -1,4 +1,4 @@
-const { generateID } = require('./utils');
+const { generateID } = require('../../_utils');
 
 const insertComment =
     ({ db, logger }) =>

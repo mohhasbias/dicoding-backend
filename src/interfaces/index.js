@@ -1,21 +1,22 @@
-const postUser = require('./post-user');
-const postAuthentications = require('./post-authentications');
-const putAuthentications = require('./put-authentications');
-const deleteAuthentications = require('./delete-authentications');
-const postThreads = require('./post-thread');
-const postThreadComment = require('./post-thread-comment');
+const postUser = require('./handler/post-user');
+const postAuthentications = require('./handler/post-authentications');
+const putAuthentications = require('./handler/put-authentications');
+const deleteAuthentications = require('./handler/delete-authentications');
+const postThreads = require('./handler/post-thread');
+const postThreadComment = require('./handler/post-thread-comment');
 
-const insertUser = require('./insert-user');
-const isUserExist = require('./is-user-exist');
-const verifyUser = require('./verify-user');
-const addRefreshToken = require('./add-refresh-token');
-const isTokenExist = require('./is-token-exist');
-const removeRefreshToken = require('./remove-refresh-token');
-const insertThread = require('./insert-thread');
-const insertComment = require('./insert-comment');
-const isThreadExist = require('./is-thread-exist');
+const insertUser = require('./repository/users/insert-user');
+const isUserExist = require('./repository/users/is-user-exist');
+const verifyUser = require('./repository/users/verify-user');
+const addRefreshToken = require('./repository/authentications/add-refresh-token');
+const isTokenExist = require('./repository/authentications/is-token-exist');
+const removeRefreshToken = require('./repository/authentications/remove-refresh-token');
+const insertThread = require('./repository/threads/insert-thread');
+const insertComment = require('./repository/comments/insert-comment');
+const isThreadExist = require('./repository/threads/is-thread-exist');
 
-const getComments = require('./get-comments');
+const getComments = require('./handler/get-comments');
+const deleteComments = require('./handler/delete-comments');
 
 module.exports = (services) => {
     const dbHandler = {
@@ -33,32 +34,35 @@ module.exports = (services) => {
     const injectedServices = {
         ...services,
         db: {
-            ...services.db,
-            ...dbHandler
+            ...dbHandler,
         },
     };
 
     return [
-        { method: 'POST', path: '/users', handler: postUser(injectedServices) },
+        {
+            method: 'POST',
+            path: '/users',
+            handler: postUser(services),
+        },
         {
             method: 'POST',
             path: '/authentications',
-            handler: postAuthentications(injectedServices),
+            handler: postAuthentications(services),
         },
         {
             method: 'PUT',
             path: '/authentications',
-            handler: putAuthentications(injectedServices),
+            handler: putAuthentications(services),
         },
         {
             method: 'DELETE',
             path: '/authentications',
-            handler: deleteAuthentications(injectedServices),
+            handler: deleteAuthentications(services),
         },
         {
             method: 'POST',
             path: '/threads',
-            handler: postThreads(injectedServices),
+            handler: postThreads(services),
             options: {
                 auth: 'forum_api_jwt',
             },
@@ -74,7 +78,15 @@ module.exports = (services) => {
         {
             method: 'GET',
             path: '/threads/{threadId}',
-            handler: getComments.httpHandler(injectedServices),
-        }
+            handler: getComments(services),
+        },
+        {
+            method: 'DELETE',
+            path: '/threads/{threadId}/comments/{commentId}',
+            handler: deleteComments(services),
+            options: {
+                auth: 'forum_api_jwt',
+            },
+        },
     ];
 };
