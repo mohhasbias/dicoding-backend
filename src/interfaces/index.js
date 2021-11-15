@@ -15,7 +15,7 @@ const insertThread = require('./insert-thread');
 const insertComment = require('./insert-comment');
 const isThreadExist = require('./is-thread-exist');
 
-// const getComments = require('./get-comments');
+const getComments = require('./get-comments');
 
 module.exports = (services) => {
     const dbHandler = {
@@ -32,7 +32,10 @@ module.exports = (services) => {
 
     const injectedServices = {
         ...services,
-        db: dbHandler,
+        db: {
+            ...services.db,
+            ...dbHandler
+        },
     };
 
     return [
@@ -68,6 +71,10 @@ module.exports = (services) => {
                 auth: 'forum_api_jwt',
             },
         },
-        // getComments
+        {
+            method: 'GET',
+            path: '/threads/{threadId}',
+            handler: getComments.httpHandler(injectedServices),
+        }
     ];
 };

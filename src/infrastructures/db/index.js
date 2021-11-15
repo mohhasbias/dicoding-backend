@@ -16,4 +16,5 @@ module.exports = {
     authentications: () => knex('AUTHENTICATIONS'),
     threads: () => knex('THREADS'),
     comments: () => knex('COMMENTS'),
+    conn: () => knex,
 };
