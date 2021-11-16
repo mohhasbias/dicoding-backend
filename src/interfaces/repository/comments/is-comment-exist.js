@@ -8,11 +8,9 @@ const isCommentExist =
                 id: commentId,
             });
 
-            console.log(result);
-
             return result.length === 1;
         } catch (e) {
-            console.log('Error checking is comment exist');
+            logger.error('Error checking is comment exist');
             e.isDB = true;
             throw e;
         }

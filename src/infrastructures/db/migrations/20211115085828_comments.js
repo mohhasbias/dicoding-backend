@@ -9,8 +9,16 @@ exports.up = function (knex) {
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
 
-        table.foreign('owner').references('id').inTable('USERS').onDelete('CASCADE');
-        table.foreign('thread').references('id').inTable('THREADS').onDelete('CASCADE');
+        table
+            .foreign('owner')
+            .references('id')
+            .inTable('USERS')
+            .onDelete('CASCADE');
+        table
+            .foreign('thread')
+            .references('id')
+            .inTable('THREADS')
+            .onDelete('CASCADE');
     });
 };
 

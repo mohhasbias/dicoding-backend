@@ -58,7 +58,9 @@ const createServer = async (
                 const codes = {
                     'Thread tidak exist': 404,
                     'Comment tidak exist': 404,
+                    'Reply tidak exist': 404,
                     'Invalid comment owner': 403,
+                    'Invalid reply owner': 403,
                 };
                 console.error(response);
                 return h

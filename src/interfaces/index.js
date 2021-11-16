@@ -6,6 +6,8 @@ const postThreads = require('./handler/post-thread');
 const postThreadComment = require('./handler/post-thread-comment');
 const getComments = require('./handler/get-comments');
 const deleteComments = require('./handler/delete-comments');
+const postCommentReply = require('./handler/post-comment-reply');
+const deleteCommentReply = require('./handler/delete-comment-reply');
 
 module.exports = (services) => {
     return [
@@ -54,6 +56,22 @@ module.exports = (services) => {
             method: 'DELETE',
             path: '/threads/{threadId}/comments/{commentId}',
             handler: deleteComments(services),
+            options: {
+                auth: 'forum_api_jwt',
+            },
+        },
+        {
+            method: 'POST',
+            path: '/threads/{threadId}/comments/{commentId}/replies',
+            handler: postCommentReply(services),
+            options: {
+                auth: 'forum_api_jwt',
+            },
+        },
+        {
+            method: 'DELETE',
+            path: '/threads/{threadId}/comments/{commentId}/replies/{replyId}',
+            handler: deleteCommentReply(services),
             options: {
                 auth: 'forum_api_jwt',
             },

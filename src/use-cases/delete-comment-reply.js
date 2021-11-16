@@ -1,6 +1,6 @@
-const deleteComments =
+const deleteCommentReply =
     ({ isThreadExist, isCommentExist, isCommentOwner, softDeleteComment, logger }) =>
-    async (threadId, commentsId, userId) => {
+    async (threadId, commentsId, replyId, userId) => {
         logger.info('use case: delete comments');
 
         if (!await isThreadExist(threadId)) {
@@ -15,15 +15,21 @@ const deleteComments =
             throw err;
         }
 
-        if (!await isCommentOwner(commentsId, userId)) {
-            const err = new Error('Invalid comment owner');
+        if (!await isCommentExist(replyId)) {
+            const err = new Error('Reply tidak exist');
             err.isDB = true;
             throw err;
         }
 
-        await softDeleteComment(commentsId, '**komentar telah dihapus**');
+        if (!await isCommentOwner(replyId, userId)) {
+            const err = new Error('Invalid reply owner');
+            err.isDB = true;
+            throw err;
+        }
+
+        await softDeleteComment(replyId, '**balasan telah dihapus**');
 
         return true;
     };
 
-module.exports = deleteComments;
+module.exports = deleteCommentReply;

@@ -1,6 +1,6 @@
 const delComment =
     ({ db, logger }) =>
-    async (commentId) => {
+    async (commentId, deleteContent) => {
         logger.info('interfaces: delete comment');
 
         try {
@@ -9,7 +9,7 @@ const delComment =
             })
             .update({
                 is_delete: true,
-                content: '**komentar telah dihapus**'
+                content: deleteContent
             });
 
             console.log(result);
