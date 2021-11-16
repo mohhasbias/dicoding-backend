@@ -1,7 +1,7 @@
 const winston = require('winston');
 
 const logger = winston.createLogger({
-    level: process.env.NODE_ENV === 'test' ? 'error' : 'info',
+    level: 'info',
     format: winston.format.json(),
     defaultMeta: { service: 'forum-api-service' },
     transports: [
@@ -27,6 +27,10 @@ if (process.env.NODE_ENV !== 'production') {
             format: winston.format.simple(),
         })
     );
+}
+
+if (process.env.NODE_ENV === 'test') {
+    logger.level = 'error';
 }
 
 module.exports = logger;
