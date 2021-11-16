@@ -1,8 +1,7 @@
 const winston = require('winston');
-const { combine, timestamp, label, prettyPrint } = winston.format;
 
 const logger = winston.createLogger({
-    level: 'info',
+    level: process.env.NODE_ENV === 'test' ? 'error' : 'info',
     format: winston.format.json(),
     defaultMeta: { service: 'forum-api-service' },
     transports: [

@@ -19,8 +19,8 @@ const verifyUser =
             logger.info('num user: ' + result.length);
 
             return {
-                isVerified: result[0].password === hash(user.password),
-                id: result[0].id,
+                isVerified: result.length === 1 && result[0].password === hash(user.password),
+                id: result.length === 1 && result[0].id,
             };
         } catch (e) {
             logger.error('cannot verify user');

@@ -5,7 +5,8 @@
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
-        "test": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
+        "test": "env-cmd jest --coverage",
+        "test:postman": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
         "prettier": "prettier --write .",
         "migrate:make": "knex --knexfile src/infrastructures/db/knexfile.js migrate:make",
         "migrate:up": "env-cmd knex --knexfile src/infrastructures/db/knexfile.js migrate:up",
@@ -22,6 +23,7 @@
         "crypto-js": "^4.1.1",
         "dotenv": "^10.0.0",
         "env-cmd": "^10.1.0",
+        "jest": "^27.3.1",
         "joi": "^17.4.2",
         "knex": "^0.95.14",
         "nanoid": "^3.1.30",
