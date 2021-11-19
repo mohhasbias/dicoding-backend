@@ -2,6 +2,7 @@
 const login = require('../../use-cases/login');
 
 // relevant interfaces
+const isUserExist = require('../repository/users/is-user-exist');
 const verifyUser = require('../repository/users/verify-user');
 const addRefreshToken = require('../repository/authentications/add-refresh-token');
 
@@ -12,6 +13,7 @@ const postAuthentications = (services) => async (req, h) => {
 
     const injectedServices = {
         ...services,
+        isUserExist: isUserExist(services),
         verifyUser: verifyUser(services),
         addRefreshToken: addRefreshToken(services),
     };
