@@ -35,8 +35,7 @@ jobs:
     - name: checkout repository code
       uses: actions/checkout@v2
     - name: install dependencies
-      run: npm ci
-    - run: npm run build --if-present
+      run: npm install
     - name: setup database
       run: npm run migrate:latest
       env:
