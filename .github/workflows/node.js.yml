@@ -36,6 +36,11 @@ jobs:
       uses: actions/checkout@v2
     - name: install dependencies
       run: npm install
+    - name: configure variables
+      run: |
+        sed -i -e "s|forum_api_dev|postgres|g" .env && \
+        sed -i -e "s|devel|postgres|g" .env && \
+        sed -i -e "s|secret|postgres|g" .env && \
     - name: setup database
       run: npm run migrate:latest
       env:
