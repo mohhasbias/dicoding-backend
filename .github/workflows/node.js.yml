@@ -40,7 +40,7 @@ jobs:
       run: |
         sed -i -e "s|forum_api_dev|postgres|g" .env && \
         sed -i -e "s|devel|postgres|g" .env && \
-        sed -i -e "s|secret|postgres|g" .env && \
+        sed -i -e "s|secret|postgres|g" .env
     - name: setup database
       run: npm run migrate:latest
       env:
