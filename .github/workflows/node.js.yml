@@ -102,6 +102,9 @@ jobs:
           --health-retries 5
       forum-api:
         image: ghcr.io/mohhasbias/dicoding-backend
+        credentials:
+         username: ${{ github.actor }}
+         password: ${{ secrets.GITHUB_TOKEN }}
         options: >-
           --health-cmd curl forum-api:5000
           --health-interval 10s
