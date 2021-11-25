@@ -43,5 +43,9 @@ jobs:
         sed -i -e "s|secret|postgres|g" .env
     - name: setup database
       run: npm run migrate:latest
+      env:
+        PGHOST: postgres
     - name: do functional test
       run: npm test -- --detectOpenHandles
+      env:
+        PGHOST: postgres
