@@ -81,6 +81,9 @@ jobs:
         
   e2e-test:
     needs: build-and-publish
+    permissions:
+      contents: read
+      packages: read
     runs-on: ubuntu-latest
     container: node:14.7.0
     services:
