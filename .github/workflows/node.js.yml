@@ -46,6 +46,6 @@ jobs:
       env:
         PGHOST: postgres
     - name: do functional test
-      run: npm test -- --detectOpenHandles
+      run: npm test -- --detectOpenHandles --forceExit
       env:
         PGHOST: postgres
