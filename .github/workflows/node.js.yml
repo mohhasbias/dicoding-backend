@@ -1,0 +1,53 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+    
+    container: node:14.7.0
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+    steps:
+    - name: checkout repository code
+      uses: actions/checkout@v2
+    - name: install dependencies
+      run: npm ci
+    - run: npm run build --if-present
+    - name: setup database
+      run: npm run migrate:latest
+      env:
+        PGHOST: postgres
+        PG_USER: postgres
+        PG_PASS: postgres
+        PG_DATABASE: postgres
+    - name: do functional test
+      run: npm test
+      env:
+        PGHOST: postgres
+        PG_USER: postgres
+        PG_PASS: postgres
+        PG_DATABASE: postgres
