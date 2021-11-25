@@ -25,7 +25,7 @@ const insertUser =
 
             return result[0];
         } catch (e) {
-            console.log('Error insert user');
+            logger.error('Error insert user');
             e.isDB = true;
             throw e;
         }

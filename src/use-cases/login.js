@@ -12,7 +12,7 @@ const login = ({isUserExist, verifyUser, addRefreshToken, logger}) => async (use
     }
 
     const { isVerified: isVerifiedUser, id } = await verifyUser(user);
-    console.log(isVerifiedUser);
+    logger.info(isVerifiedUser);
     if (!isVerifiedUser) {
         const e = new Error('Invalid Username or Password');
         e.isAuthError = true;

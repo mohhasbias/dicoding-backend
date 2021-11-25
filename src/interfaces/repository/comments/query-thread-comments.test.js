@@ -70,7 +70,5 @@ describe('query thread comment', () => {
         const threadComments = await queryThreadComments({ db, logger })(
             threadId
         );
-
-        console.log(threadComments);
     });
 });

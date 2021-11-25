@@ -21,8 +21,6 @@ const getCommentsHandler = (services) => async (req, h) => {
     // call use cases
     const threadWithComments = await getComments(injectedServices)(threadId);
 
-    console.log(threadWithComments);
-
     // build http response
     return h
         .response({

@@ -10,7 +10,7 @@ const isTokenExist =
 
             return result.length === 1;
         } catch (e) {
-            console.log('Error checking is token exist');
+            logger.error('Error checking is token exist');
             e.isDB = true;
             throw e;
         }

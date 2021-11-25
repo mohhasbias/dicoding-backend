@@ -9,11 +9,9 @@ const isCommentOwner =
                 owner: userId,
             });
 
-            console.log(result);
-
             return result.length === 1;
         } catch (e) {
-            console.log('Error checking is comment owner');
+            logger.error('Error checking is comment owner');
             e.isDB = true;
             throw e;
         }

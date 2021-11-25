@@ -12,7 +12,7 @@ const addRefreshToken =
 
             return result[0];
         } catch (e) {
-            console.log('Error adding refresh token');
+            logger.error('Error adding refresh token');
             e.isDB = true;
             throw e;
         }

@@ -15,7 +15,7 @@ const removeRefreshToken =
 
             return result[0];
         } catch (e) {
-            console.log('Error removing refresh token');
+            logger.error('Error removing refresh token');
             e.isDB = true;
             throw e;
         }

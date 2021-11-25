@@ -12,11 +12,9 @@ const delComment =
                 content: deleteContent
             });
 
-            console.log(result);
-
             return result[0];
         } catch (e) {
-            console.log('Error deleting comment');
+            logger.error('Error deleting comment');
             e.isDB = true;
             throw e;
         }

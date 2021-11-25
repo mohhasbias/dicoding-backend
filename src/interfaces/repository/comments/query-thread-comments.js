@@ -67,7 +67,7 @@ const queryThreadComments =
 
             return result;
         } catch (e) {
-            console.log('Error query thread comments');
+            logger.error('Error query thread comments');
             e.isDB = true;
             throw e;
         }
