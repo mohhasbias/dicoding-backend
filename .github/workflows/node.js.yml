@@ -100,7 +100,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       forum-api:
-        image: ghcr.io/${{ github.actor }}/${{ github.repository }}
+        image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
         credentials:
          username: ${{ github.actor }}
          password: ${{ secrets.GITHUB_TOKEN }}
