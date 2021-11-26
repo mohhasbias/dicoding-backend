@@ -76,5 +76,12 @@ module.exports = (services) => {
                 auth: 'forum_api_jwt',
             },
         },
+        { 
+            method: 'GET',
+            path: '/healthcheck',
+            handler: () => ({
+                status: 'running'
+            }),
+        }
     ];
 };
