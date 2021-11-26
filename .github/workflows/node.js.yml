@@ -135,7 +135,8 @@ jobs:
       run: |
         sed -i -e "s|forum_api_dev|postgres|g" .env && \
         sed -i -e "s|devel|postgres|g" .env && \
-        sed -i -e "s|secret|postgres|g" .env
+        sed -i -e "s|secret|postgres|g" .env \
+        cat .env
     - name: configure postman environment
       run: |
         sed -i -e "s|localhost|forum-api|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json"
