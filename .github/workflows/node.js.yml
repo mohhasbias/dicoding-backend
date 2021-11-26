@@ -85,7 +85,8 @@ jobs:
       contents: read
       packages: read
     runs-on: ubuntu-latest
-    container: node:14.7.0
+    container: 
+      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     services:
       # Label used to access the service container
       postgres:
@@ -101,7 +102,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       forum-api:
-        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
+        image: ghcr.io/${{ github.actor }}/${{ github.repository }}
         credentials:
          username: ${{ github.actor }}
          password: ${{ secrets.GITHUB_TOKEN }}
