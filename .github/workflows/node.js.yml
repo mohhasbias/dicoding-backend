@@ -85,8 +85,6 @@ jobs:
       contents: read
       packages: read
     runs-on: ubuntu-latest
-    container: 
-      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     services:
       # Label used to access the service container
       postgres:
