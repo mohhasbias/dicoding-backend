@@ -85,6 +85,7 @@ jobs:
       contents: read
       packages: read
     runs-on: ubuntu-latest
+    container: node:14.7.0
     services:
       # Label used to access the service container
       postgres:
