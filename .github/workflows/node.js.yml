@@ -101,7 +101,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       forum-api:
-        image: ghcr.io/mohhasbias/dicoding-backend:main
+        image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:main
         credentials:
          username: ${{ github.actor }}
          password: ${{ secrets.GITHUB_TOKEN }}
