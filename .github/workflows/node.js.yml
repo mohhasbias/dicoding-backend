@@ -45,11 +45,16 @@ jobs:
       run: npm run migrate:latest
       env:
         PGHOST: postgres
-    - name: do functional test
-      run: npm test -- --detectOpenHandles --forceExit
+    - name: do unit test
+      run: npm run test:unit -- --detectOpenHandles --forceExit
       env:
         PGHOST: postgres
-        NODE_ENV: test     
+        NODE_ENV: test    
+    - name: do integration test
+      run: npm run test:integration -- --detectOpenHandles --forceExit
+      env:
+        PGHOST: postgres
+        NODE_ENV: test 
           
   build-and-publish:
     needs: functional-test
