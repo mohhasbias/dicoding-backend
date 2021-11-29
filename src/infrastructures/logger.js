@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 if (process.env.NODE_ENV === 'test') {
-    logger.level = 'error';
+    logger.silent = true
 }
 
 module.exports = logger;

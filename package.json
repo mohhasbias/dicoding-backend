@@ -5,7 +5,9 @@
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
-        "test": "env-cmd jest --coverage",
+        "test": "env-cmd --no-override jest --coverage",
+        "test:unit": "env-cmd --no-override jest --coverage \"entities|use-cases\"",
+        "test:integration": "env-cmd --no-override jest --coverage \"repository\"",
         "test:postman": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
         "prettier": "prettier --write .",
         "migrate:make": "knex --knexfile src/infrastructures/db/knexfile.js migrate:make",
