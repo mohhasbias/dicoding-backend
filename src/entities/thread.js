@@ -6,9 +6,6 @@ const threadSchema = Joi.object({
     body: Joi.string().required(),
 }).required();
 
-const newThread = (thread) => {
-    const validatedThread = Joi.attempt(thread, threadSchema);
-    return validatedThread;
-};
+const newThread = (thread) => Joi.attempt(thread, threadSchema);
 
 module.exports = newThread;

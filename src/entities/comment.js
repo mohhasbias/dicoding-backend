@@ -6,9 +6,6 @@ const commentSchema = Joi.object({
     thread: Joi.string().required(),
 }).required();
 
-const newComment = (comment) => {
-    const validatedComment = Joi.attempt(comment, commentSchema);
-    return validatedComment;
-};
+const newComment = (comment) => Joi.attempt(comment, commentSchema);
 
 module.exports = newComment;

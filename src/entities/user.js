@@ -9,9 +9,6 @@ const userSchema = Joi.object({
     fullname: Joi.string().required(),
 }).required();
 
-const newUser = (user) => {
-    const validatedUser = Joi.attempt(user, userSchema);
-    return validatedUser;
-};
+const newUser = (user) => Joi.attempt(user, userSchema);
 
 module.exports = newUser;
