@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  functional-test:
+  unit-and-integration-test:
     runs-on: ubuntu-latest
     container: node:14.7.0
     services:
@@ -57,7 +57,7 @@ jobs:
         NODE_ENV: test 
           
   build-and-publish:
-    needs: functional-test
+    needs: unit-and-integration-test
     permissions:
       contents: read
       packages: write
