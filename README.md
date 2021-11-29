@@ -1,5 +1,7 @@
 # Using Clean Architecture Implementation in NodeJS
 
+[![Node.js CI](https://github.com/mohhasbias/dicoding-backend/actions/workflows/node.js.yml/badge.svg?branch=main&event=push)](https://github.com/mohhasbias/dicoding-backend/actions/workflows/node.js.yml)
+
 this is an implementaion of back end API using clean architecture approach.
 
 - [Using Clean Architecture Implementation in NodeJS](#using-clean-architecture-implementation-in-nodejs)
