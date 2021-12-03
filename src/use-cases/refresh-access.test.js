@@ -30,4 +30,17 @@ describe('refresh access', () => {
             expect(e).toHaveProperty('isAuthError');
         });
     });
+
+    it('should reject invalid refresh token', async () => {
+        const mockService = {
+            isTokenExist: () => Promise.resolve(true),
+            logger: { info: () => {} },
+        };
+
+        const invalidRefreshToken = Jwt.token.generate({}, 'random-secret');
+
+        await refreshAccess(mockService)(invalidRefreshToken).catch((e) => {
+            expect(e).toHaveProperty('isAuthError');
+        });
+    });
 });
