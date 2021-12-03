@@ -1,5 +1,3 @@
-const { generateAccessToken, generateRefreshToken } = require('./_utils');
-
 const logout = ({ isTokenExist, removeRefreshToken, logger }) => async (refreshToken) => {
     logger.info('use cases: logout');
 

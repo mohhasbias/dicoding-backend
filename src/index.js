@@ -20,7 +20,7 @@ const services = {
 };
 
 (async () => {
-    // create main infrastructure
+    // start main infrastructure
     const server = await createServer(config, routes(services));
     await server.start();
     logger.info(`server start at ${server.info.uri}`);

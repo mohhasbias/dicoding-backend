@@ -51,6 +51,8 @@ run the application using `npm start`
 - test the app using command line version of postman using `npm test:postman`
   or use Postman App
 - testing and coverage using jest via `npm test`
+- unit testing using jest via `npm run test:unit`
+- integration testing using jest via `npm run test:integration`
 
 # Clean Architecture Elements
 

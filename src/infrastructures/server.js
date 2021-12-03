@@ -12,11 +12,7 @@ const createServer = async (
         port: config.port,
     });
 
-    await server.register([
-        {
-            plugin: Jwt,
-        },
-    ]);
+    await server.register([{ plugin: Jwt }]);
 
     server.auth.strategy('forum_api_jwt', 'jwt', {
         keys: process.env.ACCESS_TOKEN_KEY,
@@ -93,7 +89,8 @@ const createServer = async (
                     })
                     .code(codes[response.message] || 401);
             }
-            console.error(response);
+
+            logger.error(JSON.stringify(response));
             return h
                 .response({
                     status: 'fail',
