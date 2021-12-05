@@ -1,31 +1,40 @@
 const db = require('../../../infrastructures/db');
 const logger = require('../../../infrastructures/logger');
 
+const insertUser = require('./insert-user');
 const verifyUser = require('./verify-user');
 
 describe('verify user', () => {
+    const services = {
+        db,
+        logger,
+    };
+
     it('should verify user', async () => {
         const user = {
-            username: 'dicoding_1637055727',
+            username: 'dicoding_' + Date.now(),
             password: 'secret',
             fullname: 'Dicoding Indonesia',
         };
 
-        const spyUser = jest.spyOn(db, 'user');
+        await insertUser(services)(user);
 
-        const result = await verifyUser({ db, logger })(user);
+        const result = await verifyUser(services)(user);
 
-        expect(spyUser).toHaveBeenCalled();
-        expect(result).toHaveProperty('isVerified');
-        expect(result).toHaveProperty('id');
+        expect(result.isVerified).toBeTruthy();
+    });
 
-        spyUser.mockImplementation(() => {
-            throw new Error();
+    it('should throw an error on query error', async () => {
+        jest.spyOn(db, 'user');
+
+        db.user.mockImplementation(() => {
+            throw new Error('simulate query error');
         });
-        
-        expect.assertions(4);
-        await verifyUser({ db, logger })(user).catch((e) => {
+
+        await verifyUser(services)({}).catch((e) => {
             expect(e).toHaveProperty('isDB');
         });
+
+        db.user.mockRestore();
     });
 });
