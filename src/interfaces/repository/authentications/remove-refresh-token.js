@@ -13,7 +13,7 @@ const removeRefreshToken =
 
             logger.info('interfaces: refresh token removed');
 
-            return result[0];
+            return result;
         } catch (e) {
             logger.error('Error removing refresh token');
             e.isDB = true;

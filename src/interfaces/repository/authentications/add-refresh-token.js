@@ -4,9 +4,12 @@ const addRefreshToken =
         logger.info('interfaces: add refresh token');
 
         try {
-            const result = await db.authentications().insert({
-                token: refreshToken,
-            });
+            const result = await db
+                .authentications()
+                .insert({
+                    token: refreshToken,
+                })
+                .returning(['token']);
 
             logger.info('interfaces: refresh token added');
 

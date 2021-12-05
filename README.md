@@ -2,7 +2,7 @@
 
 [![Node.js CI](https://github.com/mohhasbias/dicoding-backend/actions/workflows/node.js.yml/badge.svg?branch=main&event=push)](https://github.com/mohhasbias/dicoding-backend/actions/workflows/node.js.yml)
 
-this is an implementaion of back end API using clean architecture approach.
+This is an implementaion of back end API using clean architecture approach.
 
 - [Using Clean Architecture Implementation in NodeJS](#using-clean-architecture-implementation-in-nodejs)
 - [Requirements](#requirements)
@@ -24,13 +24,13 @@ this is an implementaion of back end API using clean architecture approach.
 
 # Dependencies
 
-- install dependencies using `npm install`
+- Install dependencies using `npm install`
 
-- setup appropriate database migrations using `npm run migrate:latest`
+- Setup appropriate database migrations using `npm run migrate:latest`
 
 # Configuration
 
-modify the `.env` to configure the app. here is the list of configurable options
+Modify the `.env` to configure the app. here is the list of configurable options
 | Name              |            Description             |
 | :---------------- | :--------------------------------: |
 | HOST              |              hostname              |
@@ -44,15 +44,15 @@ modify the `.env` to configure the app. here is the list of configurable options
 
 # Running the Application
 
-run the application using `npm start`
+Run the application using `npm start`
 
 # Testing
 
-- test the app using command line version of postman using `npm test:postman`
+- Test the app using command line version of postman using `npm test:postman`
   or use Postman App
-- testing and coverage using jest via `npm test`
-- unit testing using jest via `npm run test:unit`
-- integration testing using jest via `npm run test:integration`
+- Testing and coverage using jest via `npm test`
+- Unit testing using jest via `npm run test:unit`
+- Integration testing using jest via `npm run test:integration`
 
 # Clean Architecture Elements
 
@@ -69,11 +69,11 @@ run the application using `npm start`
 
 ## Use Cases
 
-as listed in `use-cases` folder
+As listed in `use-cases` folder
 
 ## Entities
 
-as listed in `entities` folder
+As listed in `entities` folder
 
 # References
 
