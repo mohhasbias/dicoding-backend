@@ -22,14 +22,12 @@ const putAuthentications = (services) => async (req, h) => {
     const accessToken = await refreshAccess(injectedServices)(refreshToken);
 
     // build http response
-    return h
-        .response({
-            status: 'success',
-            data: {
-                accessToken,
-            },
-        })
-        .code(200);
+    return {
+        status: 'success',
+        data: {
+            accessToken,
+        },
+    };
 };
 
 module.exports = putAuthentications;

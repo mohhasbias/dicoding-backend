@@ -32,7 +32,7 @@ describe('query thread comment', () => {
 
     it('should return comments with replies', async () => {
         const user = {
-            username: 'dicoding',
+            username: 'dicoding' + Date.now(),
             password: 'secret',
             fullname: 'Dicoding Indonesia',
         };
@@ -70,5 +70,18 @@ describe('query thread comment', () => {
         const threadComments = await queryThreadComments({ db, logger })(
             threadId
         );
+
+        expect(threadComments).toHaveProperty('title');
+        expect(threadComments).toHaveProperty('body');
+        expect(threadComments).toHaveProperty('date');
+        expect(threadComments).toHaveProperty('username');
+        
+        expect(threadComments).toHaveProperty(['comments', 0, 'username']);
+        expect(threadComments).toHaveProperty(['comments', 0, 'date']);
+        expect(threadComments).toHaveProperty(['comments', 0, 'content']);
+
+        expect(threadComments).toHaveProperty(['comments', 0, 'replies', 0, 'username']);
+        expect(threadComments).toHaveProperty(['comments', 0, 'replies', 0, 'date']);
+        expect(threadComments).toHaveProperty(['comments', 0, 'replies', 0, 'content']);
     });
 });

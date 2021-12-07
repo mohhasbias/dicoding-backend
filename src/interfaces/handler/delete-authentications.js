@@ -13,15 +13,13 @@ const deleteAuthentications = (services) => async (req, h) => {
         ...services,
         isTokenExist: isTokenExist(services),
         removeRefreshToken: removeRefreshToken(services),
-    }
+    };
 
     await logout(injectedServices)(refreshToken);
 
-    return h
-        .response({
-            status: 'success',
-        })
-        .code(200);
+    return {
+        status: 'success',
+    };
 };
 
 module.exports = deleteAuthentications;

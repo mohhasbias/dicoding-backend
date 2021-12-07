@@ -8,6 +8,7 @@ const softDeleteComment = require('../repository/comments/soft-delete-comment');
 const deleteCommentsHandler = (services) => async (req, h) => {
     const { logger } = services;
     logger.info('interfaces: delete comments');
+
     // extract http request
     const { threadId, commentId } = req.params;
     const userId = req.auth.credentials.id;
@@ -25,11 +26,9 @@ const deleteCommentsHandler = (services) => async (req, h) => {
     await deleteComments(injectedServices)(threadId, commentId, userId);
 
     // build http response
-    return h
-        .response({
-            status: 'success',
-        })
-        .code(200);
+    return {
+        status: 'success',
+    };
 };
 
 module.exports = deleteCommentsHandler;

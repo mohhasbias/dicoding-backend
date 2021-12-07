@@ -20,7 +20,8 @@ describe('soft delete comment', () => {
             deleteContent
         );
 
-        expect(result.content).toEqual(deleteContent);
+        expect(result.isDelete).toBeTruthy();
+        expect(result.deleteContent).toEqual(deleteContent);
     });
 
     it('should throw an error on query error', async () => {

@@ -8,8 +8,8 @@ const postCommentReply = (services) => async (req, h) => {
     const { logger } = services;
     logger.info('interfaces: post comment reply');
 
-    const threadId = req.params.threadId;
-    const commentId = req.params.commentId;
+    const { threadId, commentId } = req.params;
+
     const comment = {
         ...req.payload,
         owner: req.auth.credentials.id,

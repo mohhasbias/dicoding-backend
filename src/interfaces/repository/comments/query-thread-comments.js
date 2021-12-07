@@ -1,64 +1,40 @@
+const selectThread = require('../threads/select-thread');
+const selectComment = require('./select-comment');
+
+const extractComment = ({
+    id,
+    username,
+    date,
+    content,
+    isDelete,
+    deleteContent,
+}) => ({
+    id,
+    username,
+    date,
+    content: isDelete ? deleteContent : content,
+});
+
 const queryThreadComments =
     ({ db, logger }) =>
     async (threadId) => {
         logger.info('interfaces: query thread comments');
 
         try {
-            const [thread] = await db
-                .conn()
-                .select([
-                    'THREADS.id as id',
-                    'title',
-                    'body',
-                    'THREADS.created_at as date',
-                    'username',
-                ])
-                .from('THREADS')
-                .leftJoin('USERS', 'USERS.id', 'owner')
-                .where({
-                    'THREADS.id': threadId,
-                });
+            const thread = await selectThread({ db, logger })(threadId);
 
-            const comments = await db
-                .conn()
-                .select([
-                    'COMMENTS.id as id',
-                    'username',
-                    'COMMENTS.created_at as date',
-                    'content',
-                ])
-                .from('THREADS')
-                .leftJoin('COMMENTS', 'THREADS.id', 'COMMENTS.thread')
-                .join('USERS', 'COMMENTS.owner', 'USERS.id')
-                .where({
-                    thread: threadId,
-                    reply_to: null,
-                })
-                .orderBy('date');
+            const comments = await selectComment({ db, logger })(threadId);
 
-            const commentsReplies = await Promise.all(
-                comments.map(async (c) => {
-                    const replies = await db
-                        .conn()
-                        .select([
-                            'COMMENTS.id as id',
-                            'username',
-                            'COMMENTS.created_at as date',
-                            'content',
-                        ])
-                        .from('COMMENTS')
-                        .join('USERS', 'COMMENTS.owner', 'USERS.id')
-                        .where({
-                            thread: threadId,
-                            reply_to: c.id,
-                        })
-                        .orderBy('date');
-                    return {
-                        ...c,
-                        replies,
-                    };
-                })
-            );
+            const headComments = comments.filter((c) => !c.replyTo);
+
+            const commentsReplies = headComments.map((c) => {
+                return {
+                    ...extractComment(c),
+                    replies: comments
+                        .filter((x) => x.replyTo === c.id)
+                        .map(extractComment),
+                };
+            });
 
             const result = {
                 ...thread,

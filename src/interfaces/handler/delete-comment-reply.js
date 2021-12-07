@@ -22,14 +22,17 @@ const deleteCommentsHandler = (services) => async (req, h) => {
     };
 
     // call use cases
-    await deleteCommentReply(injectedServices)(threadId, commentId, replyId, userId);
+    await deleteCommentReply(injectedServices)(
+        threadId,
+        commentId,
+        replyId,
+        userId
+    );
 
     // build http response
-    return h
-        .response({
-            status: 'success',
-        })
-        .code(200);
+    return {
+        status: 'success',
+    };
 };
 
 module.exports = deleteCommentsHandler;

@@ -11,9 +11,15 @@ const delComment =
                 })
                 .update({
                     is_delete: true,
-                    content: deleteContent,
+                    delete_content: deleteContent,
                 })
-                .returning(['id', 'content', 'owner']);
+                .returning([
+                    'id',
+                    'content',
+                    'owner',
+                    'is_delete as isDelete',
+                    'delete_content as deleteContent',
+                ]);
 
             return result[0];
         } catch (e) {

@@ -3,8 +3,12 @@ const addThreadComment = require('./add-thread-comment');
 describe('Add Thread Comment', () => {
     it('should add comment to an existing thread', async () => {
         const mockService = {
-            isThreadExist: () => Promise.resolve(true),
-            insertComment: (comment) => Promise.resolve(comment),
+            isThreadExist: jest
+                .fn()
+                .mockImplementation(() => Promise.resolve(true)),
+            insertComment: jest
+                .fn()
+                .mockImplementation((comment) => Promise.resolve(comment)),
             logger: {
                 info: () => {},
             },
@@ -22,6 +26,12 @@ describe('Add Thread Comment', () => {
         expect(result).toEqual({
             thread: threadId,
             ...comment,
+        });
+
+        expect(mockService.isThreadExist).toBeCalledWith(threadId);
+        expect(mockService.insertComment).toBeCalledWith({
+            ...comment,
+            thread: threadId,
         });
     });
 
