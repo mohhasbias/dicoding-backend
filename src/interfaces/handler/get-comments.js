@@ -6,6 +6,8 @@ const isThreadExist = require('../repository/threads/is-thread-exist');
 const selectThread = require('../repository/threads/select-thread');
 const selectComment = require('../repository/comments/select-comment');
 
+const { extractComment } = require('../repository/comments/_utils');
+
 const getCommentsHandler = (services) => async (req, h) => {
     const { logger } = services;
     logger.info('interfaces: get comments');
@@ -19,6 +21,7 @@ const getCommentsHandler = (services) => async (req, h) => {
         isThreadExist: isThreadExist(services),
         selectThread: selectThread(services),
         selectComment: selectComment(services),
+        extractComment,
     };
 
     // call use cases

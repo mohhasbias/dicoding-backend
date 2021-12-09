@@ -11,7 +11,7 @@ const delComment =
                 })
                 .update({
                     is_delete: true,
-                    delete_content: deleteContent,
+                    delete_content: deleteContent, // untuk support **komentar telah dihapus** dan **balasan telah dihapus**
                 })
                 .returning([
                     'id',

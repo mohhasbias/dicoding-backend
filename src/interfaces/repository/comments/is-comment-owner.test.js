@@ -2,6 +2,7 @@ const db = require('../../../infrastructures/db');
 const logger = require('../../../infrastructures/logger');
 
 const insertUser = require('../users/insert-user');
+const insertThread = require('../threads/insert-thread');
 const insertComment = require('./insert-comment');
 const isCommentOwner = require('./is-comment-owner');
 
@@ -20,8 +21,16 @@ describe('is comment owner', () => {
 
         const { id: userId } = await insertUser(services)(user);
 
+        const { id: threadId } = await insertThread(services)({
+            title: 'a thread',
+            body: 'a thread body',
+            owner: userId,
+        });
+
         const { id: commentId } = await insertComment(services)({
             owner: userId,
+            content: 'a comment content',
+            thread: threadId,
         });
 
         const result = await isCommentOwner(services)(commentId, userId);
@@ -38,8 +47,16 @@ describe('is comment owner', () => {
 
         const { id: userId } = await insertUser(services)(user);
 
+        const { id: threadId } = await insertThread(services)({
+            title: 'a thread',
+            body: 'a thread body',
+            owner: userId,
+        });
+
         const { id: commentId } = await insertComment(services)({
             owner: userId,
+            content: 'a comment content',
+            thread: threadId,
         });
 
         const result = await isCommentOwner(services)(

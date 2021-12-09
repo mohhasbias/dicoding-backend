@@ -1,22 +1,9 @@
-const extractComment = ({
-    id,
-    username,
-    date,
-    content,
-    isDelete,
-    deleteContent,
-}) => ({
-    id,
-    username,
-    date,
-    content: isDelete ? deleteContent : content,
-});
-
 const getComments =
     ({
         isThreadExist,
         selectThread,
         selectComment,
+        extractComment,
         logger,
     }) =>
     async (threadId) => {

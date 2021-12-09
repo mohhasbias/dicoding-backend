@@ -1,5 +1,7 @@
 const getComments = require('./get-comments');
 
+const { extractComment } = require('../interfaces/repository/comments/_utils');
+
 describe('get comments', () => {
     it('should get comments', async () => {
         const threadInfo = {
@@ -35,6 +37,7 @@ describe('get comments', () => {
             isThreadExist: jest.fn().mockResolvedValue(true),
             selectThread: jest.fn().mockResolvedValue(threadInfo),
             selectComment: jest.fn().mockResolvedValue(comments),
+            extractComment,
             logger: { info: () => {} },
         };
 
