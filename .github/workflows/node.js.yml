@@ -191,6 +191,10 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: container fqdn
         uses: azure/CLI@v1
         with:
