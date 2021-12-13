@@ -186,3 +186,14 @@ jobs:
           location: 'east us'
           ports: ${{ env.PORT }}
           secure-environment-variables: HOST=0.0.0.0 PORT=${{ env.PORT }} PGHOST=${{ secrets.PGHOST }} PG_USER=${{ secrets.PG_USER }} PG_PASS=${{ secrets.PG_PASS }} PG_DATABASE=${{ secrets.PG_DATABASE }} ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }} ACCESS_TOKEN_AGE=1800 REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}
+
+  security-scan:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: target scan
+        run: echo ${{ jobs.deploy.outputs }}
+#       - name: OWASP ZAP Baseline Scan
+#         uses: zaproxy/action-baseline@v0.6.1
+#         with:
+#           target: 'https://www.zaproxy.org'
