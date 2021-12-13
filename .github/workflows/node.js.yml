@@ -156,8 +156,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT: 5000
-    outputs:
-      appUrl: ${{ steps.step6.outputs['app-url'] }}
     steps:
       - name: checkout repository code
         uses: actions/checkout@v2
@@ -193,9 +191,15 @@ jobs:
     needs: deploy
     runs-on: ubuntu-latest
     steps:
+      - name: container fqdn
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.30.0
+          inlineScript: |
+            az container show --resource-group dicoding-backend --name forum-api-container --query "join(':',[ipAddress.fqdn, to_string(ipAddress.ports[0].port)])"
       - name: target scan
-        run: echo ${{ join(needs.deploy.outputs.*, '\n') }}
+        run: echo "::set-output name=appUrl::${{ steps['container fqdn'].outputs }}"
 #       - name: OWASP ZAP Baseline Scan
 #         uses: zaproxy/action-baseline@v0.6.1
 #         with:
-#           target: 'https://www.zaproxy.org'
+#           target: ${{ steps['target scan'].outputs.appUrl }}
