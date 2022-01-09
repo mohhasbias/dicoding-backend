@@ -1,27 +1,36 @@
 require('dotenv').config();
 
-// infrastructures
-const createServer = require('./infrastructures/server');
-const db = require('./infrastructures/db');
+// system wide options
 const logger = require('./infrastructures/logger');
 
-// interfaces
-const routes = require('./interfaces');
-
-const config = {
-    host: process.env.HOST,
-    port: process.env.PORT,
+const options = {
+    logger
 };
+
+// infrastructures
+const createServer = require('./infrastructures/server');
+const { createRepository } = require('./infrastructures/db');
+const repository = require('./infrastructures/db/repository');
+
+// interfaces
+const createRoutes = require('./interfaces');
 
 // secondary infrastructures are passed as services
+const environment = process.env.NODE_ENV || 'development';
+const dbConfig = require('./knexfile')[environment];
+
 const services = {
-    db,
-    logger,
+    repository: createRepository(dbConfig, repository, options),
 };
 
+// main loop
 (async () => {
     // start main infrastructure
-    const server = await createServer(config, routes(services));
+    const httpConfig = {
+        host: process.env.HOST,
+        port: process.env.PORT,
+    };
+    const server = await createServer(httpConfig, createRoutes(services, options), options);
     await server.start();
     logger.info(`server start at ${server.info.uri}`);
 })();

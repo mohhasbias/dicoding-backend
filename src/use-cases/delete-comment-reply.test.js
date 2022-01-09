@@ -3,10 +3,11 @@ const deleteCommentReply = require('./delete-comment-reply');
 describe('delete comment reply', () => {
     it('should delete comment reply', async () => {
         const mockService = {
-            isThreadExist: () => Promise.resolve(true),
-            isCommentExist: () => Promise.resolve(true),
-            isCommentOwner: () => Promise.resolve(true),
-            softDeleteComment: () => Promise.resolve(true),
+            isThreadExist: jest.fn().mockResolvedValue(true),
+            isCommentExist: jest.fn().mockResolvedValue(true),
+            isReplyExist: jest.fn().mockResolvedValue(true),
+            isReplyOwner: jest.fn().mockResolvedValue(true),
+            softDeleteReply: jest.fn().mockResolvedValue(true),
             logger: { info: () => {} },
         };
 
@@ -21,6 +22,12 @@ describe('delete comment reply', () => {
             replyId,
             userId
         );
+
+        expect(mockService.isThreadExist).toHaveBeenCalledWith(threadId);
+        expect(mockService.isCommentExist).toHaveBeenCalledWith(commentId);
+        expect(mockService.isReplyExist).toHaveBeenCalledWith(replyId);
+        expect(mockService.isReplyOwner).toHaveBeenCalledWith(replyId, userId);
+        expect(mockService.softDeleteReply).toHaveBeenCalledWith(replyId);
     });
 
     it('should reject non existent thread', async () => {
@@ -55,6 +62,7 @@ describe('delete comment reply', () => {
             isThreadExist: () => Promise.resolve(true),
             isCommentExist: (commentId) =>
                 Promise.resolve(commentId === 'commentId'),
+            isReplyExist: () => Promise.resolve(false),
             logger: { info: () => {} },
         };
 
@@ -75,7 +83,8 @@ describe('delete comment reply', () => {
                 Promise.resolve(
                     commentId === 'commentId' || commentId === 'replyId'
                 ),
-            isCommentOwner: () => Promise.resolve(false),
+            isReplyExist: () => Promise.resolve(true),
+            isReplyOwner: () => Promise.resolve(false),
             logger: { info: () => {} },
         };
 

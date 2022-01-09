@@ -1,39 +1,35 @@
 // use cases
 const getComments = require('../../use-cases/get-comments');
 
-// relevant interfaces
-const isThreadExist = require('../repository/threads/is-thread-exist');
-const selectThread = require('../repository/threads/select-thread');
-const selectComment = require('../repository/comments/select-comment');
+const getCommentsHandler =
+    ({ repository }, { logger }) =>
+    async (req, h) => {
+        logger.info('interfaces: get comments');
 
-const { extractComment } = require('../repository/comments/_utils');
+        // extract http request
+        const threadId = req.params.threadId;
 
-const getCommentsHandler = (services) => async (req, h) => {
-    const { logger } = services;
-    logger.info('interfaces: get comments');
+        // inject services (infrastructures) to use case
+        const injectedServices = {
+            isThreadExist: repository.threads.isThreadExist,
+            selectThread: repository.threads.selectThread,
+            selectComments: repository.comments.selectComments,
+            selectReplies: repository.replies.selectReplies,
+            logger,
+        };
 
-    // extract http request
-    const threadId = req.params.threadId;
+        // call use cases
+        const threadWithComments = await getComments(injectedServices)(
+            threadId
+        );
 
-    // inject services (infrastructures) to use case
-    const injectedServices = {
-        ...services,
-        isThreadExist: isThreadExist(services),
-        selectThread: selectThread(services),
-        selectComment: selectComment(services),
-        extractComment,
+        // build http response
+        return {
+            status: 'success',
+            data: {
+                thread: threadWithComments,
+            },
+        };
     };
-
-    // call use cases
-    const threadWithComments = await getComments(injectedServices)(threadId);
-
-    // build http response
-    return {
-        status: 'success',
-        data: {
-            thread: threadWithComments,
-        },
-    };
-};
 
 module.exports = getCommentsHandler;

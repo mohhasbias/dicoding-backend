@@ -3,10 +3,9 @@ const login = require('./login');
 describe('login', () => {
     it('should generate token', async () => {
         const mockService = {
-            isUserExist: () => Promise.resolve(true),
-            verifyUser: () =>
-                Promise.resolve({ isVerified: true, id: 'userId' }),
-            addRefreshToken: () => Promise.resolve(true),
+            isUserExist: jest.fn().mockResolvedValue(true),
+            verifyUser: jest.fn().mockResolvedValue({ isVerified: true, id: 'userId' }),
+            addRefreshToken: jest.fn().mockResolvedValue(true),
             logger: { info: () => {} },
         };
 
@@ -14,6 +13,10 @@ describe('login', () => {
 
         expect(result).toHaveProperty('accessToken');
         expect(result).toHaveProperty('refreshToken');
+
+        expect(mockService.isUserExist).toHaveBeenCalled();
+        expect(mockService.verifyUser).toHaveBeenCalled();
+        expect(mockService.addRefreshToken).toHaveBeenCalled();
     });
 
     it('should reject non existent user', async () => {

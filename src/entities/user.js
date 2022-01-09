@@ -11,4 +11,6 @@ const userSchema = Joi.object({
 
 const newUser = (user) => Joi.attempt(user, userSchema);
 
+newUser.schema = userSchema;
+
 module.exports = newUser;

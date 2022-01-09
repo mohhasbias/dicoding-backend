@@ -1,7 +1,5 @@
 const getComments = require('./get-comments');
 
-const { extractComment } = require('../interfaces/repository/comments/_utils');
-
 describe('get comments', () => {
     it('should get comments', async () => {
         const threadInfo = {
@@ -19,25 +17,25 @@ describe('get comments', () => {
                 date: new Date(),
                 content: 'comment content',
                 isDelete: false,
-                deleteContent: null,
-                replyTo: null,
             },
+        ];
+
+        const replies = [
             {
-                id: 'commentId',
-                username: 'comment username',
+                id: 'replyId',
+                username: 'reply username',
                 date: new Date(),
-                content: 'comment reply content',
+                content: 'reply content',
                 isDelete: false,
-                deleteContent: null,
-                replyTo: 'commentId',
-            }
-        ]
+                comment: 'commentId',
+            },
+        ];
 
         const mockService = {
             isThreadExist: jest.fn().mockResolvedValue(true),
             selectThread: jest.fn().mockResolvedValue(threadInfo),
-            selectComment: jest.fn().mockResolvedValue(comments),
-            extractComment,
+            selectComments: jest.fn().mockResolvedValue(comments),
+            selectReplies: jest.fn().mockResolvedValue(replies),
             logger: { info: () => {} },
         };
 
@@ -55,6 +53,11 @@ describe('get comments', () => {
         expect(result.comments[0].replies.length).toBe(1);
         expect(result.comments[0].replies[0]).toHaveProperty('username');
         expect(result.comments[0].replies[0]).toHaveProperty('content');
+
+        expect(mockService.isThreadExist).toHaveBeenCalledWith(threadInfo.id);
+        expect(mockService.selectThread).toHaveBeenCalledWith(threadInfo.id);
+        expect(mockService.selectComments).toHaveBeenCalledWith(threadInfo.id);
+        expect(mockService.selectReplies).toHaveBeenCalledWith(threadInfo.id);
     });
 
     it('should reject non existent thread', async () => {

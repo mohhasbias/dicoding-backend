@@ -1,18 +1,45 @@
 const Hapi = require('@hapi/hapi');
+const Inert = require('@hapi/inert');
+const Vision = require('@hapi/vision');
+const HapiSwagger = require('hapi-swagger');
 const Jwt = require('@hapi/jwt');
 
-const logger = require('./logger');
+const defaultOptions = {
+    logger: console,
+};
 
 const createServer = async (
     config = { host: 'localhost', port: 3000 },
-    routes = []
+    routes = [],
+    { logger } = defaultOptions
 ) => {
     const server = Hapi.server({
         host: config.host,
         port: config.port,
     });
 
-    await server.register([{ plugin: Jwt }]);
+    await server.register([
+        { plugin: Jwt },
+        Inert,
+        Vision,
+        {
+            plugin: HapiSwagger,
+            options: {
+                info: {
+                    title: 'Dicoding Backend',
+                },
+                securityDefinitions: {
+                    jwt: {
+                        type: 'apiKey',
+                        name: 'Authorization',
+                        in: 'header',
+                    },
+                },
+                security: [{ jwt: [] }],
+                documentationPath: '/docs',
+            },
+        },
+    ]);
 
     server.auth.strategy('forum_api_jwt', 'jwt', {
         keys: process.env.ACCESS_TOKEN_KEY,
@@ -38,6 +65,7 @@ const createServer = async (
 
         // error handler
         if (response.isBoom) {
+            console.error(response);
             logger.error(response.output.payload);
             if (response.isJoi) {
                 logger.error('isJoi: ' + response.message);
@@ -58,7 +86,6 @@ const createServer = async (
                     'Invalid comment owner': 403,
                     'Invalid reply owner': 403,
                 };
-                console.error(response);
                 return h
                     .response({
                         status: 'fail',

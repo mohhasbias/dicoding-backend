@@ -1,11 +1,5 @@
 const getComments =
-    ({
-        isThreadExist,
-        selectThread,
-        selectComment,
-        extractComment,
-        logger,
-    }) =>
+    ({ isThreadExist, selectThread, selectComments, selectReplies, logger }) =>
     async (threadId) => {
         logger.info('use case: get comments');
         const isExist = await isThreadExist(threadId);
@@ -17,16 +11,14 @@ const getComments =
 
         const threadInfo = await selectThread(threadId);
 
-        const comments = await selectComment(threadId);
+        const comments = await selectComments(threadId);
 
-        const headComments = comments.filter((c) => !c.replyTo);
+        const replies = await selectReplies(threadId);
 
-        const commentsReplies = headComments.map((c) => {
+        const commentsReplies = comments.map((c) => {
             return {
-                ...extractComment(c),
-                replies: comments
-                    .filter((x) => x.replyTo === c.id)
-                    .map(extractComment),
+                ...c,
+                replies: replies.filter((x) => x.comment === c.id),
             };
         });
 

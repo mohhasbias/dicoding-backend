@@ -2,18 +2,18 @@ const addUser = require('./add-user');
 
 describe('add user', () => {
     it('should add user', async () => {
-        const mockService = {
-            isUserExist: () => Promise.resolve(false),
-            insertUser: (user) => user,
-            logger: {
-                info: () => {},
-            },
-        };
-
         const user = {
             username: 'username',
             password: 'password',
             fullname: 'fullname',
+        };
+
+        const mockService = {
+            isUserExist: jest.fn().mockResolvedValue(false),
+            insertUser: jest.fn().mockReturnValue(user),
+            logger: {
+                info: () => {},
+            },
         };
 
         const result = await addUser(mockService)(user);
@@ -21,6 +21,9 @@ describe('add user', () => {
         expect(result).toHaveProperty('username');
         expect(result).toHaveProperty('password');
         expect(result).toHaveProperty('fullname');
+
+        expect(mockService.isUserExist).toHaveBeenCalledWith(user);
+        expect(mockService.insertUser).toHaveBeenCalledWith(user);
     });
 
     it('should reject invalid user data', async () => {

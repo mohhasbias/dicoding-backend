@@ -1,38 +1,35 @@
 const deleteCommentReply = require('../../use-cases/delete-comment-reply');
 
-const isThreadExist = require('../repository/threads/is-thread-exist');
-const isCommentExist = require('../repository/comments/is-comment-exist');
-const isCommentOwner = require('../repository/comments/is-comment-owner');
-const softDeleteComment = require('../repository/comments/soft-delete-comment');
+const deleteCommentReplyHandler =
+    ({ repository }, { logger }) =>
+    async (req, h) => {
+        logger.info('interfaces: delete comment reply');
+        // extract http request
+        const { threadId, commentId, replyId } = req.params;
+        const userId = req.auth.credentials.id;
 
-const deleteCommentsHandler = (services) => async (req, h) => {
-    const { logger } = services;
-    logger.info('interfaces: delete comment reply');
-    // extract http request
-    const { threadId, commentId, replyId } = req.params;
-    const userId = req.auth.credentials.id;
+        // inject services
+        const injectedServices = {
+            isThreadExist: repository.threads.isThreadExist,
+            isCommentExist: repository.comments.isCommentExist,
+            isReplyExist: repository.replies.isReplyExist,
+            isReplyOwner: repository.replies.isReplyOwner,
+            softDeleteReply: repository.replies.softDeleteReply,
+            logger,
+        };
 
-    // injectedServices
-    const injectedServices = {
-        ...services,
-        isThreadExist: isThreadExist(services),
-        isCommentExist: isCommentExist(services),
-        isCommentOwner: isCommentOwner(services),
-        softDeleteComment: softDeleteComment(services),
+        // call use cases
+        await deleteCommentReply(injectedServices)(
+            threadId,
+            commentId,
+            replyId,
+            userId
+        );
+
+        // build http response
+        return {
+            status: 'success',
+        };
     };
 
-    // call use cases
-    await deleteCommentReply(injectedServices)(
-        threadId,
-        commentId,
-        replyId,
-        userId
-    );
-
-    // build http response
-    return {
-        status: 'success',
-    };
-};
-
-module.exports = deleteCommentsHandler;
+module.exports = deleteCommentReplyHandler;

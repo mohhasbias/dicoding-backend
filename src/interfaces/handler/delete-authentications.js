@@ -1,25 +1,23 @@
 const logout = require('../../use-cases/logout');
 
-const isTokenExist = require('../repository/authentications/is-token-exist');
-const removeRefreshToken = require('../repository/authentications/remove-refresh-token');
+const deleteAuthentications =
+    ({ repository }, { logger }) =>
+    async (req, h) => {
+        logger.info('interfaces: delete authentications');
 
-const deleteAuthentications = (services) => async (req, h) => {
-    const { logger } = services;
-    logger.info('interfaces: delete authentications');
+        const { refreshToken } = req.payload;
 
-    const { refreshToken } = req.payload;
+        const injectedServices = {
+            isTokenExist: repository.authentications.isTokenExist,
+            removeRefreshToken: repository.authentications.removeRefreshToken,
+            logger,
+        };
 
-    const injectedServices = {
-        ...services,
-        isTokenExist: isTokenExist(services),
-        removeRefreshToken: removeRefreshToken(services),
+        await logout(injectedServices)(refreshToken);
+
+        return {
+            status: 'success',
+        };
     };
-
-    await logout(injectedServices)(refreshToken);
-
-    return {
-        status: 'success',
-    };
-};
 
 module.exports = deleteAuthentications;

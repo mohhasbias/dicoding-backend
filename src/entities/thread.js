@@ -8,4 +8,6 @@ const threadSchema = Joi.object({
 
 const newThread = (thread) => Joi.attempt(thread, threadSchema);
 
+newThread.schema = threadSchema;
+
 module.exports = newThread;

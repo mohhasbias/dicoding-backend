@@ -1,8 +1,8 @@
 const newComment = require('../entities/comment');
 
 const commentReply =
-    ({ isThreadExist, isCommentExist, insertCommentReply, logger }) =>
-    async (threadId, commentId, comment) => {
+    ({ isThreadExist, isCommentExist, insertReply, logger }) =>
+    async (threadId, commentId, reply) => {
         logger.info('use cases: comment reply');
 
         const isExist = await isThreadExist(threadId);
@@ -18,9 +18,9 @@ const commentReply =
             throw err;
         }
 
-        const validatedComment = newComment(comment);
+        const validatedReply = newComment(reply);
 
-        const addedCommentReply = await insertCommentReply(commentId, validatedComment);        
+        const addedCommentReply = await insertReply(commentId, validatedReply);        
 
         return addedCommentReply;
     };
