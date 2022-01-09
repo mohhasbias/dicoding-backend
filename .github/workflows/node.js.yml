@@ -143,44 +143,44 @@ jobs:
     - name: run postman
       run: npm run test:postman
       
-  deploy:
-    needs: e2e-test
-    permissions:
-      contents: read
-      packages: read
-    runs-on: ubuntu-latest
-    env:
-      PORT: 5000
-    steps:
-      - name: checkout repository code
-        uses: actions/checkout@v2
-      - name: install dependencies
-        run: npm install
-      - name: configure variables
-        run: |
-          sed -i -e "s|forum_api_dev|${{ secrets.PG_DATABASE }}|g" .env && \
-          sed -i -e "s|devel|${{ secrets.PG_USER }}|g" .env && \
-          sed -i -e "s|secret|${{ secrets.PG_PASS }}|g" .env
-      - name: setup database
-        run: npm run migrate:latest
-        env:
-          PGHOST: ${{ secrets.PGHOST }}
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - uses: Azure/aci-deploy@v1
-        with:
-          resource-group: dicoding-backend
-          dns-name-label: forum-api
-          image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-          registry-login-server: ghcr.io
-          registry-username: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
-          name: forum-api-container
-          location: 'east us'
-          ports: ${{ env.PORT }}
-          secure-environment-variables: HOST=0.0.0.0 PORT=${{ env.PORT }} PGHOST=${{ secrets.PGHOST }} PG_USER=${{ secrets.PG_USER }} PG_PASS=${{ secrets.PG_PASS }} PG_DATABASE=${{ secrets.PG_DATABASE }} ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }} ACCESS_TOKEN_AGE=1800 REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}
+#   deploy:
+#     needs: e2e-test
+#     permissions:
+#       contents: read
+#       packages: read
+#     runs-on: ubuntu-latest
+#     env:
+#       PORT: 5000
+#     steps:
+#       - name: checkout repository code
+#         uses: actions/checkout@v2
+#       - name: install dependencies
+#         run: npm install
+#       - name: configure variables
+#         run: |
+#           sed -i -e "s|forum_api_dev|${{ secrets.PG_DATABASE }}|g" .env && \
+#           sed -i -e "s|devel|${{ secrets.PG_USER }}|g" .env && \
+#           sed -i -e "s|secret|${{ secrets.PG_PASS }}|g" .env
+#       - name: setup database
+#         run: npm run migrate:latest
+#         env:
+#           PGHOST: ${{ secrets.PGHOST }}
+#       - name: 'Login via Azure CLI'
+#         uses: azure/login@v1
+#         with:
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
+#       - uses: Azure/aci-deploy@v1
+#         with:
+#           resource-group: dicoding-backend
+#           dns-name-label: forum-api
+#           image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+#           registry-login-server: ghcr.io
+#           registry-username: ${{ github.actor }}
+#           registry-password: ${{ secrets.GITHUB_TOKEN }}
+#           name: forum-api-container
+#           location: 'east us'
+#           ports: ${{ env.PORT }}
+#           secure-environment-variables: HOST=0.0.0.0 PORT=${{ env.PORT }} PGHOST=${{ secrets.PGHOST }} PG_USER=${{ secrets.PG_USER }} PG_PASS=${{ secrets.PG_PASS }} PG_DATABASE=${{ secrets.PG_DATABASE }} ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }} ACCESS_TOKEN_AGE=1800 REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}
 
   security-scan:
     needs: deploy
