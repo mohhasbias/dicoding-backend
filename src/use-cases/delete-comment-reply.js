@@ -28,8 +28,6 @@ const deleteCommentReply =
         }
 
         await softDeleteReply(replyId);
-
-        return true;
     };
 
 module.exports = deleteCommentReply;

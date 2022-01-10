@@ -1,5 +1,3 @@
-const { extractComment } = require('./_utils');
-
 const selectComments =
     ({ db, logger }) =>
     async (threadId) => {
@@ -22,7 +20,7 @@ const selectComments =
                 })
                 .orderBy('date');
 
-            return comments.map(extractComment);
+            return comments;
         } catch (e) {
             logger.error('Error query thread comments');
             e.isDB = true;

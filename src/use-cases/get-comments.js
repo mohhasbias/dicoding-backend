@@ -17,8 +17,20 @@ const getComments =
 
         const commentsReplies = comments.map((c) => {
             return {
-                ...c,
-                replies: replies.filter((x) => x.comment === c.id),
+                ...{
+                    ...c,
+                    content: c.isDelete
+                        ? '**komentar telah dihapus**'
+                        : c.content,
+                },
+                replies: replies
+                    .filter((x) => x.comment === c.id)
+                    .map((r) => ({
+                        ...r,
+                        content: r.isDelete
+                            ? '**balasan telah dihapus**'
+                            : r.content,
+                    })),
             };
         });
 

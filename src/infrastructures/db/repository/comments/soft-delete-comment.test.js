@@ -53,7 +53,7 @@ describe('soft delete comment', () => {
 
         expect(deletedComment).toHaveProperty('id', commentId);
         expect(deletedComment).toHaveProperty('username', user.username);
-        expect(deletedComment).toHaveProperty('content', '**komentar telah dihapus**');
+        expect(deletedComment).toHaveProperty('isDelete', true);
     });
 
     it('should throw an error on query error', async () => {

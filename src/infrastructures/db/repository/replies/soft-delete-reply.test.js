@@ -61,7 +61,7 @@ describe('soft delete reply', () => {
 
         expect(deletedReply).toHaveProperty('id', replyId);
         expect(deletedReply).toHaveProperty('username', user.username);
-        expect(deletedReply).toHaveProperty('content', '**balasan telah dihapus**');
+        expect(deletedReply).toHaveProperty('isDelete', true);
     });
 
     it('should throw an error on query error', async () => {

@@ -41,18 +41,18 @@ describe('get comments', () => {
 
         const result = await getComments(mockService)(threadInfo.id);
 
-        expect(result).toHaveProperty('title');
-        expect(result).toHaveProperty('body');
-        expect(result).toHaveProperty('username');
+        expect(result).toHaveProperty('title',threadInfo.title);
+        expect(result).toHaveProperty('body', threadInfo.body);
+        expect(result).toHaveProperty('username', threadInfo.username);
 
         expect(result.comments.length).toBe(1);
-        expect(result.comments[0]).toHaveProperty('username');
-        expect(result.comments[0]).toHaveProperty('content');
+        expect(result.comments[0]).toHaveProperty('username', comments[0].username);
+        expect(result.comments[0]).toHaveProperty('content', comments[0].content);
         expect(result.comments[0]).toHaveProperty('replies');
 
         expect(result.comments[0].replies.length).toBe(1);
-        expect(result.comments[0].replies[0]).toHaveProperty('username');
-        expect(result.comments[0].replies[0]).toHaveProperty('content');
+        expect(result.comments[0].replies[0]).toHaveProperty('username', replies[0].username);
+        expect(result.comments[0].replies[0]).toHaveProperty('content', replies[0].content);
 
         expect(mockService.isThreadExist).toHaveBeenCalledWith(threadInfo.id);
         expect(mockService.selectThread).toHaveBeenCalledWith(threadInfo.id);

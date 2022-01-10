@@ -21,7 +21,7 @@ const deleteComments =
             throw err;
         }
 
-        await softDeleteComment(commentsId, '**komentar telah dihapus**');
+        await softDeleteComment(commentsId);
 
         return true;
     };

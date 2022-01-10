@@ -1,5 +1,3 @@
-const { extractReply } = require('./_utils');
-
 const selectReplies =
     ({ db, logger }) =>
     async (threadId) => {
@@ -23,7 +21,7 @@ const selectReplies =
                 })
                 .orderBy('date');
 
-            return replies.map(extractReply);
+            return replies;
         } catch (e) {
             logger.error('Error query thread replies');
             e.isDB = true;
