@@ -19,12 +19,12 @@ const repository = require('./infrastructures/db/repository');
 const createRoutes = require('./interfaces');
 const routesAndHandlers = require('./interfaces/handler');
 
-// secondary infrastructures are passed as services
+// dependencies
 const environment = process.env.NODE_ENV || 'development';
 const dbConfig = require('./knexfile')[environment];
 const dbConn = createDbConnection(dbConfig, options);
 
-const services = {
+const dependencies = {
     db: dbConn,
     repository: createRepository(dbConn, repository, options),
 };
@@ -38,7 +38,7 @@ const services = {
     };
     const server = await createServer(
         httpConfig,
-        createRoutes(services, routesAndHandlers, options),
+        createRoutes(dependencies, routesAndHandlers, options),
         options
     );
     await server.start();
