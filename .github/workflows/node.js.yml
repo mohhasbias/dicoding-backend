@@ -182,22 +182,22 @@ jobs:
 #           ports: ${{ env.PORT }}
 #           secure-environment-variables: HOST=0.0.0.0 PORT=${{ env.PORT }} PGHOST=${{ secrets.PGHOST }} PG_USER=${{ secrets.PG_USER }} PG_PASS=${{ secrets.PG_PASS }} PG_DATABASE=${{ secrets.PG_DATABASE }} ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }} ACCESS_TOKEN_AGE=1800 REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}
 
-  security-scan:
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: container fqdn
-        uses: azure/CLI@v1
-        with:
-          azcliversion: 2.30.0
-          inlineScript: |
-            az container show --resource-group dicoding-backend --name forum-api-container --query "join(':',[ipAddress.fqdn, to_string(ipAddress.ports[0].port)])"
-      - name: target scan
-        run: echo "::set-output name=appUrl::${{ steps['container fqdn'].outputs }}"
+#   security-scan:
+#     needs: deploy
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 'Login via Azure CLI'
+#         uses: azure/login@v1
+#         with:
+#           creds: ${{ secrets.AZURE_CREDENTIALS }}
+#       - name: container fqdn
+#         uses: azure/CLI@v1
+#         with:
+#           azcliversion: 2.30.0
+#           inlineScript: |
+#             az container show --resource-group dicoding-backend --name forum-api-container --query "join(':',[ipAddress.fqdn, to_string(ipAddress.ports[0].port)])"
+#       - name: target scan
+#         run: echo "::set-output name=appUrl::${{ steps['container fqdn'].outputs }}"
 #       - name: OWASP ZAP Baseline Scan
 #         uses: zaproxy/action-baseline@v0.6.1
 #         with:
