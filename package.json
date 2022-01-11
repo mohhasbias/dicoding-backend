@@ -14,7 +14,8 @@
         "migrate:up": "env-cmd knex --knexfile src/knexfile.js migrate:up",
         "migrate:rollback": "env-cmd knex --knexfile src/knexfile.js migrate:rollback",
         "migrate:latest": "env-cmd knex --knexfile src/knexfile.js migrate:latest",
-        "create-key": "node -p \"require('crypto').randomBytes(64).toString('hex');\""
+        "create-key": "node -p \"require('crypto').randomBytes(64).toString('hex');\"",
+        "repl": "node src/interfaces/repl/index.js"
     },
     "keywords": [],
     "author": "",

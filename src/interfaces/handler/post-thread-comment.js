@@ -4,9 +4,10 @@ const postThreadComment =
         logger.info('interfaces: post thread');
 
         const threadId = req.params.threadId;
+        const userId = req.auth.credentials.id;
         const comment = {
             ...req.payload,
-            owner: req.auth.credentials.id,
+            owner: userId,
         };
 
         const addedThreadComment = await addThreadComment(threadId, comment);

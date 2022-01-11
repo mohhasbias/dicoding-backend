@@ -1,19 +1,17 @@
 require('dotenv').config();
 
+const repl = require('repl');
 const awilix = require('awilix');
 
-// infrastructures
-const logger = require('./infrastructures/logger');
-const createServer = require('./infrastructures/server');
-const { createDbConnection } = require('./infrastructures/db');
-const knexfile = require('./knexfile');
+const logger = require('../../infrastructures/logger');
+const { createDbConnection } = require('../../infrastructures/db');
+const knexfile = require('../../knexfile');
+
+logger.silent = true;
 
 const environment = process.env.NODE_ENV || 'development';
 const dbConfig = knexfile[environment];
 const dbConn = createDbConnection(dbConfig, { logger });
-
-// interfaces
-const makeRoutesAndHandlers = require('./interfaces/handler');
 
 // dependencies injection
 const containerToInjector = (container) =>
@@ -31,7 +29,6 @@ repositoryContainer.loadModules(
     ['src/infrastructures/db/repository/**/!(*.test).js'],
     { formatName: 'camelCase' }
 );
-logger.log('repository', Object.keys(repositoryContainer.registrations));
 
 const useCaseContainer = awilix.createContainer();
 useCaseContainer.loadModules(
@@ -47,18 +44,17 @@ useCaseContainer.loadModules(
         formatName: 'camelCase',
     }
 );
-logger.log('use case', Object.keys(useCaseContainer.registrations));
 
-const rootContainer = awilix.createContainer();
-rootContainer.register({
+const container = awilix.createContainer();
+container.register({
     logger: awilix.asValue(logger),
     dbConn: awilix.asValue(dbConn),
-    routes: awilix.asFunction(makeRoutesAndHandlers),
+    verifyRefreshToken: awilix.asValue(require('../../use-cases/_utils').verifyRefreshToken),
 });
-rootContainer.loadModules(
+container.loadModules(
     [
         [
-            'src/interfaces/handler/*.js',
+            'src/interfaces/repl/!(index).js',
             {
                 injector: () => containerToInjector(useCaseContainer),
             },
@@ -68,20 +64,26 @@ rootContainer.loadModules(
         formatName: 'camelCase',
     }
 );
-logger.log('handler', Object.keys(rootContainer.registrations));
+console.log('Available command:');
+console.log(Object.keys(container.registrations).join('\n'));
 
-const dependencyInjection = rootContainer.cradle;
+// start repl
+const local = repl.start('node::forum-api> ');
 
-// main loop
-(async () => {
-    // start main infrastructure
-    const httpConfig = {
-        host: process.env.HOST,
-        port: process.env.PORT,
-    };
-    const server = await createServer(httpConfig, dependencyInjection.routes, {
-        logger: dependencyInjection.logger,
+// inject features
+const injectContainerToContext = (container, context) => {
+    Object.keys(container.registrations).forEach(async (key) => {
+        context[key] = container.resolve(key);
     });
-    await server.start();
-    logger.info(`server start at ${server.info.uri}`);
-})();
+};
+
+local.context['hello'] = () => 'hello from repl';
+local.context['help'] = () => Object.keys(container.registrations);
+
+injectContainerToContext(container, local.context);
+
+local.setupHistory('logs/repl-history.txt', () => {});
+
+local.on('exit', () => {
+    local.context.dbConn.conn().destroy();
+});
