@@ -1,7 +1,7 @@
 const isThreadExist =
     ({ db, logger }) =>
     async (threadId) => {
-        logger.info('interfaces: is thread exist');
+        logger.info('infrastructure (repository): is thread exist');
 
         try {
             logger.info('checking if thread exist');

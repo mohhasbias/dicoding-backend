@@ -1,19 +1,11 @@
-const logout = require('../../use-cases/logout');
-
 const deleteAuthentications =
-    ({ repository }, { logger }) =>
+    ({ logout, logger }) =>
     async (req, h) => {
         logger.info('interfaces: delete authentications');
 
         const { refreshToken } = req.payload;
 
-        const injectedServices = {
-            isTokenExist: repository.authentications.isTokenExist,
-            removeRefreshToken: repository.authentications.removeRefreshToken,
-            logger,
-        };
-
-        await logout(injectedServices)(refreshToken);
+        await logout(refreshToken);
 
         return {
             status: 'success',

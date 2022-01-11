@@ -1,7 +1,5 @@
-const commentReply = require('../../use-cases/comment-reply');
-
 const postCommentReply =
-    ({ repository }, { logger }) =>
+    ({ commentReply, logger }) =>
     async (req, h) => {
         logger.info('interfaces: post comment reply');
 
@@ -13,14 +11,7 @@ const postCommentReply =
             thread: threadId,
         };
 
-        const injectedServices = {
-            isThreadExist: repository.threads.isThreadExist,
-            isCommentExist: repository.comments.isCommentExist,
-            insertReply: repository.replies.insertReply,
-            logger,
-        };
-
-        const addedCommentReply = await commentReply(injectedServices)(
+        const addedCommentReply = await commentReply(
             threadId,
             commentId,
             reply

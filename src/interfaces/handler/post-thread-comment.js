@@ -1,7 +1,5 @@
-const addThreadComment = require('../../use-cases/add-thread-comment');
-
 const postThreadComment =
-    ({ repository }, { logger }) =>
+    ({ addThreadComment, logger }) =>
     async (req, h) => {
         logger.info('interfaces: post thread');
 
@@ -11,16 +9,7 @@ const postThreadComment =
             owner: req.auth.credentials.id,
         };
 
-        const injectedServices = {
-            isThreadExist: repository.threads.isThreadExist,
-            insertComment: repository.comments.insertComment,
-            logger,
-        };
-
-        const addedThreadComment = await addThreadComment(injectedServices)(
-            threadId,
-            comment
-        );
+        const addedThreadComment = await addThreadComment(threadId, comment);
 
         return h
             .response({

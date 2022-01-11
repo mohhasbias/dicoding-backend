@@ -3,18 +3,19 @@ const Joi = require('joi');
 const { schema: userSchema } = require('../../entities/user');
 const { schema: threadSchema } = require('../../entities/thread');
 
-const postUser = require('./post-user');
-const postAuthentications = require('./post-authentications');
-const putAuthentications = require('./put-authentications');
-const deleteAuthentications = require('./delete-authentications');
-const postThreads = require('./post-thread');
-const postThreadComment = require('./post-thread-comment');
-const getComments = require('./get-comments');
-const deleteComments = require('./delete-comments');
-const postCommentReply = require('./post-comment-reply');
-const deleteCommentReply = require('./delete-comment-reply');
-
-const routesAndHandlers = [
+const makeRoutesAndHandlers = ({
+    postUser,
+    postAuthentications,
+    putAuthentications,
+    deleteAuthentications,
+    postThread,
+    postThreadComment,
+    getThread,
+    deleteComments,
+    postCommentReply,
+    deleteCommentReply,
+    getHealthcheck,
+}) => [
     {
         method: 'POST',
         path: '/users',
@@ -66,7 +67,7 @@ const routesAndHandlers = [
     {
         method: 'POST',
         path: '/threads',
-        handler: postThreads,
+        handler: postThread,
         options: {
             auth: 'forum_api_jwt',
             tags: ['api'],
@@ -95,7 +96,7 @@ const routesAndHandlers = [
     {
         method: 'GET',
         path: '/threads/{threadId}',
-        handler: getComments,
+        handler: getThread,
         options: {
             tags: ['api'],
             validate: {
@@ -135,13 +136,11 @@ const routesAndHandlers = [
     {
         method: 'GET',
         path: '/healthcheck',
-        handler: ({ dbConn }) => async () => ({
-            status: await dbConn.conn.raw('SELECT 1') ? 'up' : 'down',
-        }),
+        handler: getHealthcheck,
         options: {
             tags: ['api'],
         },
     },
 ];
 
-module.exports = routesAndHandlers;
+module.exports = makeRoutesAndHandlers;
