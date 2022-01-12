@@ -1,4 +1,4 @@
-const deleteComments = require('./delete-comments');
+const deleteComment = require('./delete-comment');
 
 describe('delete comment', () => {
     it('should delete comment', async () => {
@@ -10,7 +10,7 @@ describe('delete comment', () => {
             logger: { info: () => {} },
         };
 
-        const result = await deleteComments(mockService)();
+        const result = await deleteComment(mockService)();
 
         expect(result).toBeTruthy();
 
@@ -26,7 +26,7 @@ describe('delete comment', () => {
             logger: { info: () => {} },
         };
 
-        await deleteComments(mockService)().catch((e) => {
+        await deleteComment(mockService)().catch((e) => {
             expect(e).toHaveProperty('isDB');
         });
 
@@ -39,7 +39,7 @@ describe('delete comment', () => {
             logger: { info: () => {} },
         };
 
-        await deleteComments(mockService)().catch((e) => {
+        await deleteComment(mockService)().catch((e) => {
             expect(e).toHaveProperty('isDB');
         });
     });
@@ -52,7 +52,7 @@ describe('delete comment', () => {
             logger: { info: () => {} },
         };
 
-        await deleteComments(mockService)().catch((e) => {
+        await deleteComment(mockService)().catch((e) => {
             expect(e).toHaveProperty('isDB');
         });
     });

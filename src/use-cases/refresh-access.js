@@ -12,7 +12,7 @@ const refreshAccess =
             throw err;
         }
 
-        const payload = verifyRefreshToken(refreshToken);
+        const { iat, ...payload } = verifyRefreshToken(refreshToken);
 
         return generateAccessToken(payload);
     };

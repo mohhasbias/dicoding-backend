@@ -12,22 +12,37 @@ describe('get comments', () => {
 
         const comments = [
             {
-                id: 'commentId',
+                id: 'commentId1',
                 username: 'comment username',
                 date: new Date(),
                 content: 'comment content',
                 isDelete: false,
             },
+            {
+                id: 'commentId2',
+                username: 'comment username',
+                date: new Date(),
+                content: 'another comment content',
+                isDelete: true,
+            },
         ];
 
         const replies = [
             {
-                id: 'replyId',
+                id: 'replyId1',
                 username: 'reply username',
                 date: new Date(),
                 content: 'reply content',
                 isDelete: false,
-                comment: 'commentId',
+                comment: 'commentId1',
+            },
+            {
+                id: 'replyId2',
+                username: 'reply username',
+                date: new Date(),
+                content: 'another reply content',
+                isDelete: true,
+                comment: 'commentId1',
             },
         ];
 
@@ -45,12 +60,12 @@ describe('get comments', () => {
         expect(result).toHaveProperty('body', threadInfo.body);
         expect(result).toHaveProperty('username', threadInfo.username);
 
-        expect(result.comments.length).toBe(1);
+        expect(result.comments.length).toBe(2);
         expect(result.comments[0]).toHaveProperty('username', comments[0].username);
         expect(result.comments[0]).toHaveProperty('content', comments[0].content);
         expect(result.comments[0]).toHaveProperty('replies');
 
-        expect(result.comments[0].replies.length).toBe(1);
+        expect(result.comments[0].replies.length).toBe(2);
         expect(result.comments[0].replies[0]).toHaveProperty('username', replies[0].username);
         expect(result.comments[0].replies[0]).toHaveProperty('content', replies[0].content);
 

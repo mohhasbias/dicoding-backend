@@ -1,5 +1,5 @@
-const deleteCommentsHandler =
-    ({ deleteComments, logger }) =>
+const deleteCommentHandler =
+    ({ deleteComment, logger }) =>
     async (req, h) => {
         logger.info('interfaces: delete comments');
 
@@ -8,7 +8,7 @@ const deleteCommentsHandler =
         const userId = req.auth.credentials.id;
 
         // call use cases
-        await deleteComments(threadId, commentId, userId);
+        await deleteComment(threadId, commentId, userId);
 
         // build http response
         return {
@@ -16,4 +16,4 @@ const deleteCommentsHandler =
         };
     };
 
-module.exports = deleteCommentsHandler;
+module.exports = deleteCommentHandler;

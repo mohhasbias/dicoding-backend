@@ -3,8 +3,6 @@ const getThread =
     async (threadId) => {
         logger.info('interfaces: get thread with comments');
 
-        console.log(threadId);
-
         // call use cases
         const threadWithComments = await getComments(threadId);
 

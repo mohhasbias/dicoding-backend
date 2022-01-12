@@ -1,9 +1,14 @@
-const refreshAuth =
-    ({ refreshAccess, logger }) =>
-    async (refreshToken) => {
-        logger.info('interfaces: put authentications');
+const Jwt = require('@hapi/jwt');
 
-        const accessToken = await refreshAccess(refreshToken);
+const refreshAuth =
+    ({ refreshAccess, currentUser, verifyAccessToken, logger }) =>
+    async (refreshToken) => {
+        logger.info('interfaces: refresh authentications');
+
+        const accessToken = await refreshAccess(currentUser.refreshToken);
+
+        currentUser.loggedIn = true;
+        currentUser.accessToken = accessToken;
 
         return {
             status: 'success',

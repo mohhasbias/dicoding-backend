@@ -11,7 +11,7 @@ const makeRoutesAndHandlers = ({
     postThread,
     postThreadComment,
     getThread,
-    deleteComments,
+    deleteComment,
     postCommentReply,
     deleteCommentReply,
     getHealthcheck,
@@ -109,7 +109,7 @@ const makeRoutesAndHandlers = ({
     {
         method: 'DELETE',
         path: '/threads/{threadId}/comments/{commentId}',
-        handler: deleteComments,
+        handler: deleteComment,
         options: {
             auth: 'forum_api_jwt',
             tags: ['api'],

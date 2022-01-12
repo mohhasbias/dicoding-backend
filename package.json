@@ -5,7 +5,7 @@
     "main": "src/index.js",
     "scripts": {
         "start": "node src/index.js",
-        "test": "env-cmd --no-override jest --coverage",
+        "test": "npm run test:unit && npm run test:integration && npm run test:postman",
         "test:unit": "env-cmd --no-override jest --coverage \"entities|use-cases\"",
         "test:integration": "env-cmd --no-override jest --coverage \"repository\"",
         "test:postman": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
@@ -15,7 +15,7 @@
         "migrate:rollback": "env-cmd knex --knexfile src/knexfile.js migrate:rollback",
         "migrate:latest": "env-cmd knex --knexfile src/knexfile.js migrate:latest",
         "create-key": "node -p \"require('crypto').randomBytes(64).toString('hex');\"",
-        "repl": "node src/interfaces/repl/index.js"
+        "repl": "node src/repl.js"
     },
     "keywords": [],
     "author": "",
