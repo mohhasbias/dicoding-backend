@@ -1,4 +1,4 @@
-const newComment = require('../entities/comment');
+const newReply = require('../entities/reply');
 
 const commentReply =
     ({ isThreadExist, isCommentExist, insertReply, logger }) =>
@@ -18,7 +18,7 @@ const commentReply =
             throw err;
         }
 
-        const validatedReply = newComment(reply);
+        const validatedReply = newReply(reply);
 
         const addedCommentReply = await insertReply(commentId, validatedReply);        
 

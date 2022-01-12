@@ -4,9 +4,9 @@ const awilix = require('awilix');
 
 // infrastructures
 const logger = require('./infrastructures/logger');
-const createServer = require('./infrastructures/server');
 const { createDbConnection } = require('./infrastructures/db');
 const knexfile = require('./knexfile');
+const createServer = require('./infrastructures/server');
 
 const environment = process.env.NODE_ENV || 'development';
 const dbConfig = knexfile[environment];
@@ -31,7 +31,6 @@ repositoryContainer.loadModules(
     ['src/infrastructures/db/repository/**/!(*.test).js'],
     { formatName: 'camelCase' }
 );
-logger.log('repository', Object.keys(repositoryContainer.registrations));
 
 const useCaseContainer = awilix.createContainer();
 useCaseContainer.loadModules(
@@ -47,7 +46,6 @@ useCaseContainer.loadModules(
         formatName: 'camelCase',
     }
 );
-logger.log('use case', Object.keys(useCaseContainer.registrations));
 
 const rootContainer = awilix.createContainer();
 rootContainer.register({
@@ -68,11 +66,10 @@ rootContainer.loadModules(
         formatName: 'camelCase',
     }
 );
-logger.log('handler', Object.keys(rootContainer.registrations));
 
+// start http listener
 const dependencyInjection = rootContainer.cradle;
 
-// main loop
 (async () => {
     // start main infrastructure
     const httpConfig = {
