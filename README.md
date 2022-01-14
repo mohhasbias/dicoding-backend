@@ -50,22 +50,23 @@ Run the application using `npm start`
 
 - Test the app using command line version of postman using `npm test:postman`
   or use Postman App
-- Testing and coverage using jest via `npm test`
 - Unit testing using jest via `npm run test:unit`
 - Integration testing using jest via `npm run test:integration`
+- Testing and coverage using jest via `npm test`
 
 # Clean Architecture Elements
 
 ## Infrastructures
 
--   hapijs (server.js)
--   postgresql (db.js)
--   winston (logger.js)
+- hapijs (server.js)
+- postgresql (db.js)
+  - repository (db queries)
+- winston (logger.js)
 
 ## Interfaces
 
--   http handlers
--   repository (db handlers)
+- http handlers
+- repl
 
 ## Use Cases
 
@@ -77,5 +78,6 @@ As listed in `entities` folder
 
 # References
 
-[Menjadi Back-End Developer Expert - Dicoding Indonesia](https://www.dicoding.com/academies/276)
-[Using Clean Architecture for Microservice APIs in Node.js with MongoDB and Express](https://www.youtube.com/watch?v=CnailTcJV_U)
+- [Menjadi Back-End Developer Expert - Dicoding Indonesia](https://www.dicoding.com/academies/276)
+- [Using Clean Architecture for Microservice APIs in Node.js with MongoDB and Express](https://www.youtube.com/watch?v=CnailTcJV_U)
+- [Common web application architectures](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures#clean-architecture)

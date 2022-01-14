@@ -2,7 +2,7 @@ const { createDbConnection } = require('.src/infrastructures/db');
 const logger = require('./src/infrastructures/logger');
 
 const environment = 'development';
-const config = require('./src/knexfile')[environment];
+const config = require('./src/infrastructures/db/knexfile')[environment];
 
 const db = createDbConnection(config, { logger });
 

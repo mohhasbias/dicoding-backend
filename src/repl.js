@@ -6,7 +6,7 @@ const awilix = require('awilix');
 // infrastructures
 const logger = require('./infrastructures/logger');
 const { createDbConnection } = require('./infrastructures/db');
-const knexfile = require('./knexfile');
+const knexfile = require('./infrastructures/db/knexfile');
 
 logger.silent = true;
 
