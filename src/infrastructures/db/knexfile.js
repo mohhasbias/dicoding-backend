@@ -10,7 +10,6 @@ module.exports = {
         },
         migrations: {
             tableName: 'knex_migrations',
-            directory: __dirname + '/infrastructures/db/migrations',
         },
     },
 
@@ -27,7 +26,6 @@ module.exports = {
         },
         migrations: {
             tableName: 'knex_migrations',
-            directory: __dirname + '/infrastructures/db/migrations',
         },
     },
 
@@ -44,7 +42,6 @@ module.exports = {
         },
         migrations: {
             tableName: 'knex_migrations',
-            directory: __dirname + '/infrastructures/db/migrations',
         },
     },
 };
