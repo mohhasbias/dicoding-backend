@@ -4,7 +4,7 @@
     "description": "Clean Architecture Elements in NodeJS",
     "main": "src/index.js",
     "scripts": {
-        "start": "node src/index.js",
+        "start": "env-cmd --no-override node src/index.js",
         "test": "npm run sql:truncate && npm run test:unit && npm run test:integration && npm run test:postman",
         "test:unit": "env-cmd --no-override jest --coverage \"entities|use-cases\"",
         "test:integration": "env-cmd --no-override jest --coverage \"repository\"",
