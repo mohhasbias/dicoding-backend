@@ -1,5 +1,4 @@
 const Jwt = require('@hapi/jwt');
-const logger = require('../infrastructures/logger');
 
 const generateAccessToken = (payload) =>
     Jwt.token.generate(payload, process.env.ACCESS_TOKEN_KEY, { now: Date.now()});

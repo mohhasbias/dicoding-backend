@@ -141,6 +141,14 @@ const makeRoutesAndHandlers = ({
             tags: ['api'],
         },
     },
+    {
+        method: 'GET',
+        path: '/',
+        handler: () => () => 'Running',
+        options: {
+            tags: ['api'],
+        },
+    },
 ];
 
 module.exports = makeRoutesAndHandlers;

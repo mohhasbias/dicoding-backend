@@ -3,12 +3,8 @@ const addThreadComment = require('../add-thread-comment');
 describe('Add Thread Comment', () => {
     it('should add comment to an existing thread', async () => {
         const mockService = {
-            isThreadExist: jest
-                .fn()
-                .mockImplementation(() => Promise.resolve(true)),
-            insertComment: jest
-                .fn()
-                .mockImplementation((comment) => Promise.resolve(comment)),
+            isThreadExist: jest.fn(() => Promise.resolve(true)),
+            insertComment: jest.fn((comment) => Promise.resolve(comment)),
             logger: {
                 info: () => {},
             },

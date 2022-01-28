@@ -12,9 +12,7 @@ const addThread =
             ...thread,
         });
 
-        const addedThread = await insertThread(validatedThread);
-
-        return addedThread;
+        return insertThread(validatedThread);
     };
 
 module.exports = addThread;
