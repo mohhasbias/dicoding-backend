@@ -154,6 +154,25 @@ jobs:
           heroku_app_name: "dicoding-backend" #Must be unique in Heroku
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           usedocker: true
+          docker_build_args: |
+            HOST
+            PGHOST
+            PG_USER
+            PG_PASS
+            PG_DATABASE
+            ACCESS_TOKEN_KEY
+            ACCESS_TOKEN_AGE
+            REFRESH_TOKEN_KEY
+        env:
+          HOST: 0.0.0.0
+#           PORT: ${{ env.PORT }}
+          PGHOST: ${{ secrets.PGHOST }}
+          PG_USER: ${{ secrets.PG_USER }}
+          PG_PASS: ${{ secrets.PG_PASS }}
+          PG_DATABASE: ${{ secrets.PG_DATABASE }}
+          ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
+          ACCESS_TOKEN_AGE: 1800
+          REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
 #   deploy:
 #     needs: e2e-test
 #     permissions:
