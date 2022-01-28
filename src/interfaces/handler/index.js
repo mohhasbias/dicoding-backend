@@ -144,7 +144,7 @@ const makeRoutesAndHandlers = ({
     {
         method: 'GET',
         path: '/',
-        handler: () => () => 'Running',
+        handler: () => ({ version: '1', status: 'Running' }),
         options: {
             tags: ['api'],
         },
