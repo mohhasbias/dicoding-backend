@@ -38,6 +38,7 @@ jobs:
       run: npm install
     - name: configure variables
       run: |
+        sed -i -e "s|PGHOST=localhost|PGHOST=postgres|g" .env && \
         sed -i -e "s|forum_api_dev|postgres|g" .env && \
         sed -i -e "s|devel|postgres|g" .env && \
         sed -i -e "s|secret|postgres|g" .env
