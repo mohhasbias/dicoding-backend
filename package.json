@@ -8,6 +8,7 @@
         "test": "npm run sql:truncate && npm run test:unit && npm run test:integration && npm run test:postman",
         "test:unit": "env-cmd --no-override jest --coverage \"entities|use-cases\"",
         "test:integration": "env-cmd --no-override jest --coverage \"repository\"",
+        "test:functional": "env-cmd --no-override jest --coverage src/index.test.js",
         "test:postman": "newman run 'Forum API V1 Test/Forum API V1 Test.postman_collection.json' -e 'Forum API V1 Test/Forum API V1 Test.postman_environment.json' --bail",
         "prettier": "prettier --write .",
         "migrate:make": "knex --knexfile src/infrastructures/db/knexfile.js migrate:make",
