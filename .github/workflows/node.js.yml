@@ -57,8 +57,47 @@ jobs:
         PGHOST: postgres
         NODE_ENV: test 
           
-  build-and-publish:
+  functional-test:
     needs: unit-and-integration-test
+    runs-on: ubuntu-latest
+    container: node:14.7.0
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - name: checkout repository code
+      uses: actions/checkout@v2
+    - name: install dependencies
+      run: npm install
+    - name: configure variables
+      run: |
+        sed -i -e "s|PGHOST=localhost|PGHOST=postgres|g" .env && \
+        sed -i -e "s|forum_api_dev|postgres|g" .env && \
+        sed -i -e "s|devel|postgres|g" .env && \
+        sed -i -e "s|secret|postgres|g" .env
+    - name: setup database
+      run: npm run migrate:latest
+      env:
+        PGHOST: postgres
+    - name: do unit test
+      run: npm run test:functional -- --detectOpenHandles --forceExit
+      env:
+        PGHOST: postgres
+        NODE_ENV: test
+          
+  build-and-publish:
+    needs: functional-test
     permissions:
       contents: read
       packages: write
@@ -85,7 +124,7 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         
-  e2e-test:
+  postman-v1-test:
     needs: build-and-publish
     permissions:
       contents: read
@@ -146,7 +185,7 @@ jobs:
       run: npm run test:postman
       
   deploy:
-    needs: e2e-test
+    needs: postman-v1-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -167,7 +206,6 @@ jobs:
             REFRESH_TOKEN_KEY
         env:
           HOST: 0.0.0.0
-#           PORT: ${{ env.PORT }}
           PGHOST: ${{ secrets.PGHOST }}
           PG_USER: ${{ secrets.PG_USER }}
           PG_PASS: ${{ secrets.PG_PASS }}
@@ -175,62 +213,4 @@ jobs:
           ACCESS_TOKEN_KEY: ${{ secrets.ACCESS_TOKEN_KEY }}
           ACCESS_TOKEN_AGE: 1800
           REFRESH_TOKEN_KEY: ${{ secrets.REFRESH_TOKEN_KEY }}
-#   deploy:
-#     needs: e2e-test
-#     permissions:
-#       contents: read
-#       packages: read
-#     runs-on: ubuntu-latest
-#     env:
-#       PORT: 5000
-#     steps:
-#       - name: checkout repository code
-#         uses: actions/checkout@v2
-#       - name: install dependencies
-#         run: npm install
-#       - name: configure variables
-#         run: |
-#           sed -i -e "s|forum_api_dev|${{ secrets.PG_DATABASE }}|g" .env && \
-#           sed -i -e "s|devel|${{ secrets.PG_USER }}|g" .env && \
-#           sed -i -e "s|secret|${{ secrets.PG_PASS }}|g" .env
-#       - name: setup database
-#         run: npm run migrate:latest
-#         env:
-#           PGHOST: ${{ secrets.PGHOST }}
-#       - name: 'Login via Azure CLI'
-#         uses: azure/login@v1
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
-#       - uses: Azure/aci-deploy@v1
-#         with:
-#           resource-group: dicoding-backend
-#           dns-name-label: forum-api
-#           image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-#           registry-login-server: ghcr.io
-#           registry-username: ${{ github.actor }}
-#           registry-password: ${{ secrets.GITHUB_TOKEN }}
-#           name: forum-api-container
-#           location: 'east us'
-#           ports: ${{ env.PORT }}
-#           secure-environment-variables: HOST=0.0.0.0 PORT=${{ env.PORT }} PGHOST=${{ secrets.PGHOST }} PG_USER=${{ secrets.PG_USER }} PG_PASS=${{ secrets.PG_PASS }} PG_DATABASE=${{ secrets.PG_DATABASE }} ACCESS_TOKEN_KEY=${{ secrets.ACCESS_TOKEN_KEY }} ACCESS_TOKEN_AGE=1800 REFRESH_TOKEN_KEY=${{ secrets.REFRESH_TOKEN_KEY }}
 
-#   security-scan:
-#     needs: deploy
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: 'Login via Azure CLI'
-#         uses: azure/login@v1
-#         with:
-#           creds: ${{ secrets.AZURE_CREDENTIALS }}
-#       - name: container fqdn
-#         uses: azure/CLI@v1
-#         with:
-#           azcliversion: 2.30.0
-#           inlineScript: |
-#             az container show --resource-group dicoding-backend --name forum-api-container --query "join(':',[ipAddress.fqdn, to_string(ipAddress.ports[0].port)])"
-#       - name: target scan
-#         run: echo "::set-output name=appUrl::${{ steps['container fqdn'].outputs }}"
-#       - name: OWASP ZAP Baseline Scan
-#         uses: zaproxy/action-baseline@v0.6.1
-#         with:
-#           target: ${{ steps['target scan'].outputs.appUrl }}
