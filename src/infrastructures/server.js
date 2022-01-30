@@ -65,7 +65,7 @@ const createServer = async (
 
         // error handler
         if (response.isBoom) {
-            console.error(response);
+            logger.error(response);
             logger.error(response.output.payload);
             if (response.isJoi) {
                 logger.error('isJoi: ' + response.message);
