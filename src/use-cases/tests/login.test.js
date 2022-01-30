@@ -5,6 +5,8 @@ describe('login', () => {
         const mockService = {
             isUserExist: jest.fn().mockResolvedValue(true),
             verifyUser: jest.fn().mockResolvedValue({ isVerified: true, id: 'userId' }),
+            generateAccessToken: jest.fn().mockReturnValue('accessToken'),
+            generateRefreshToken: jest.fn().mockReturnValue('refreshToken'),
             addRefreshToken: jest.fn().mockResolvedValue(true),
             logger: { info: () => {} },
         };

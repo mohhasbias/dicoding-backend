@@ -1,23 +1,22 @@
-const Jwt = require('@hapi/jwt');
-
-const { generateRefreshToken } = require('../_utils');
-
 const refreshAccess = require('../refresh-access');
 
 describe('refresh access', () => {
     it('should refresh access token', async () => {
         const mockService = {
-            isTokenExist: () => Promise.resolve(true),
+            isTokenExist: jest.fn().mockResolvedValue(true),
+            verifyRefreshToken: jest
+                .fn()
+                .mockResolvedValue({ iat: Date.now(), id: 'userId' }),
+            generateAccessToken: jest.fn().mockReturnValue('accessToken'),
             logger: { info: () => {} },
         };
 
         const id = 'userId';
-        const refreshToken = generateRefreshToken({ id });
+        const refreshToken = 'refreshToken';
 
         const result = await refreshAccess(mockService)(refreshToken);
-        const artifacts = Jwt.token.decode(result);
 
-        expect(artifacts.decoded.payload.id).toEqual(id);
+        expect(mockService.isTokenExist).toHaveBeenCalled();
     });
 
     it('should reject non existent refresh token', async () => {
@@ -34,13 +33,19 @@ describe('refresh access', () => {
     it('should reject invalid refresh token', async () => {
         const mockService = {
             isTokenExist: () => Promise.resolve(true),
+            verifyRefreshToken: jest.fn(() => {
+                throw new Error('refresh token tidak valid');
+            }),
             logger: { info: () => {} },
         };
 
-        const invalidRefreshToken = Jwt.token.generate({}, 'random-secret');
+        // await refreshAccess(mockService)(invalidRefreshToken).catch((e) => {
+        //     expect(e).toHaveProperty('isAuthError');
+        // });
 
-        await refreshAccess(mockService)(invalidRefreshToken).catch((e) => {
-            expect(e).toHaveProperty('isAuthError');
+        await refreshAccess(mockService)('invalidRefreshToken').catch((e) => {
+            expect(e.message).toBe('refresh token tidak valid');
+            expect(mockService.verifyRefreshToken).toHaveBeenCalled();
         });
     });
 });
