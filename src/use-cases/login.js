@@ -1,6 +1,4 @@
-const { generateAccessToken, generateRefreshToken } = require('./_utils');
-
-const login = ({isUserExist, verifyUser, addRefreshToken, logger}) => async (user) => {
+const login = ({isUserExist, verifyUser, generateAccessToken, generateRefreshToken, addRefreshToken, logger}) => async (user) => {
     logger.info('use cases: login');
 
     const isExist = await isUserExist(user);

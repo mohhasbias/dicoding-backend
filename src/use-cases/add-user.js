@@ -1,3 +1,4 @@
+// entities 
 const newUser = require('../entities/user');
 
 const addUser =

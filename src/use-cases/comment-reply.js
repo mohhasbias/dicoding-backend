@@ -1,3 +1,4 @@
+// entities 
 const newReply = require('../entities/reply');
 
 const commentReply =

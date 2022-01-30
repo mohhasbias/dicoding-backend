@@ -1,7 +1,5 @@
-const { verifyRefreshToken, generateAccessToken } = require('./_utils');
-
 const refreshAccess =
-    ({ isTokenExist, logger }) =>
+    ({ isTokenExist, verifyRefreshToken, generateAccessToken, logger }) =>
     async (refreshToken) => {
         logger.info('use cases: refresh access');
 

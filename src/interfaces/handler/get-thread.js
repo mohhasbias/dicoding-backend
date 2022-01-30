@@ -6,8 +6,6 @@ const getThreadHandler =
         // extract http request
         const threadId = req.params.threadId;
 
-        console.log(threadId);
-
         // call use cases
         const threadWithComments = await getComments(threadId);
 

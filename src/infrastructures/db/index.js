@@ -20,20 +20,6 @@ const createDbConnection = (config, { logger } = { logger: console }) => {
     };
 };
 
-const createRepository = (dbConn, repository, options) => {
-    const { logger } = options;
-
-    return produce(repository, (draft) => {
-        // attach method in repo to the db
-        for (repo in repository) {
-            for (method in repository[repo]) {
-                draft[repo][method] = draft[repo][method]({ db: dbConn, logger });
-            }
-        }
-    });
-};
-
 module.exports = {
     createDbConnection,
-    createRepository,
 };

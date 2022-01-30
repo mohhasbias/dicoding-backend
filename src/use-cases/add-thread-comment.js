@@ -1,3 +1,4 @@
+// entities 
 const newComment = require('../entities/comment');
 
 const addThreadComment =

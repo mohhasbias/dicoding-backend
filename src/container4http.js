@@ -2,6 +2,12 @@ const awilix = require('awilix');
 
 // infrastructures
 const logger = require('./infrastructures/logger');
+const {
+    generateAccessToken,
+    generateRefreshToken,
+    verifyAccessToken,
+    verifyRefreshToken,
+} = require('./infrastructures/security/jwt');
 const { createDbConnection } = require('./infrastructures/db');
 const knexfile = require('./infrastructures/db/knexfile');
 
@@ -21,6 +27,14 @@ const containerToInjector = (container) =>
         {}
     );
 
+const securityContainer = awilix.createContainer();
+securityContainer.register({
+    generateAccessToken: awilix.asValue(generateAccessToken),
+    generateRefreshToken: awilix.asValue(generateRefreshToken),
+    verifyAccessToken: awilix.asValue(verifyAccessToken),
+    verifyRefreshToken: awilix.asValue(verifyRefreshToken),
+});
+
 const repositoryContainer = awilix.createContainer();
 repositoryContainer.register({
     logger: awilix.asValue(logger),
@@ -37,7 +51,10 @@ useCaseContainer.loadModules(
         [
             'src/use-cases/**/!(*.test).js',
             {
-                injector: () => containerToInjector(repositoryContainer),
+                injector: () => ({
+                    ...containerToInjector(repositoryContainer),
+                    ...containerToInjector(securityContainer),
+                }),
             },
         ],
     ],
