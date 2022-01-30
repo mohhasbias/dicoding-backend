@@ -90,7 +90,7 @@ jobs:
       run: npm run migrate:latest
       env:
         PGHOST: postgres
-    - name: do unit test
+    - name: do functional test
       run: npm run test:functional -- --detectOpenHandles --forceExit
       env:
         PGHOST: postgres
