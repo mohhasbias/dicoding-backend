@@ -52,5 +52,7 @@ COPY . /app
 
 COPY cmd-wrapper.sh cmd-wrapper.sh
 
-CMD ["/bin/sh", "-c", "./cmd-wrapper.sh"]
+RUN /bin/bash -c chmod +x ./cmd-wrapper.sh
+
+CMD ["/bin/bash", "-c", "./cmd-wrapper.sh"]
 EXPOSE $PORT
