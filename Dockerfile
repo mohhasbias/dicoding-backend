@@ -1,12 +1,23 @@
 FROM node:14.7.0
 
+ARG PORT
+
+RUN apt update && \
+    apt install -y nginx
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+RUN sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
+
+RUN cat /etc/nginx/conf.d/default.conf
+
 ################################
 # get args from docker build
 ################################
 
 # http server
 ARG HOST
-ARG PORT
+# ARG PORT
 # database server
 ARG PGHOST
 ARG PG_DATABASE
@@ -22,7 +33,7 @@ ARG REFRESH_TOKEN_KEY
 ################################
 
 ENV HOST $HOST
-ENV PORT $PORT
+# ENV PORT 5000
 ENV PGHOST $PGHOST
 ENV PG_DATABASE $PG_DATABASE
 ENV PG_USER $PG_USER
@@ -35,5 +46,9 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install
 COPY . /app
-CMD npm start
-EXPOSE 5000
+# CMD PORT=5000 npm start
+
+COPY cmd-wrapper.sh cmd-wrapper.sh
+
+CMD ["/bin/sh", "./cmd-wrapper.sh"]
+EXPOSE $PORT
