@@ -2,12 +2,14 @@ FROM node:14.7.0
 
 ARG PORT
 
+ENV PORT $PORT
+
 RUN apt update && \
     apt install -y nginx
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-RUN sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
+# RUN sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
 
 RUN cat /etc/nginx/conf.d/default.conf
 
