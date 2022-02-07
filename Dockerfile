@@ -1,7 +1,7 @@
 FROM node:14.7.0
 
+# will be used as nginx port
 ARG PORT
-
 ENV PORT $PORT
 
 RUN apt update && \
@@ -52,5 +52,5 @@ COPY . /app
 
 COPY cmd-wrapper.sh cmd-wrapper.sh
 
-CMD ["/bin/sh", "./cmd-wrapper.sh"]
+CMD ["/bin/sh", "-c", "./cmd-wrapper.sh"]
 EXPOSE $PORT
