@@ -59,7 +59,7 @@ jobs:
         NODE_ENV: test 
           
   functional-test:
-    needs: unit-and-integration-test
+#     needs: unit-and-integration-test
     runs-on: ubuntu-latest
     container: node:14.7.0
     services:
@@ -97,99 +97,101 @@ jobs:
         PGHOST: postgres
         NODE_ENV: test
           
-  build-and-publish:
-    needs: functional-test
-    permissions:
-      contents: read
-      packages: write
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout repository code
-      uses: actions/checkout@v2
-    - name: Log in to the Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-      with:
-        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-      with:
-        context: .
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+#   build-and-publish:
+#     needs: functional-test
+#     permissions:
+#       contents: read
+#       packages: write
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: checkout repository code
+#       uses: actions/checkout@v2
+#     - name: Log in to the Container registry
+#       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+#       with:
+#         registry: ${{ env.REGISTRY }}
+#         username: ${{ github.actor }}
+#         password: ${{ secrets.GITHUB_TOKEN }}
+#     - name: Extract metadata (tags, labels) for Docker
+#       id: meta
+#       uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+#       with:
+#         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#     - name: Build and push Docker image
+#       uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+#       with:
+#         context: .
+#         push: true
+#         tags: ${{ steps.meta.outputs.tags }}
+#         labels: ${{ steps.meta.outputs.labels }}
         
-  postman-v1-test:
-    needs: build-and-publish
-    permissions:
-      contents: read
-      packages: read
-    runs-on: ubuntu-latest
-    container: node:14.7.0
-    services:
-      # Label used to access the service container
-      postgres:
-        # Docker Hub image
-        image: postgres
-        # Provide the password for postgres
-        env:
-          POSTGRES_PASSWORD: postgres
-        # Set health checks to wait until postgres has started
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-      forum-api:
-        image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
-        credentials:
-         username: ${{ github.actor }}
-         password: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          # nginx server
-          PORT: ${{ env.FORUM_API_PORT }}
-          # http server
-          HOST: 0.0.0.0
-          # database server
-          PGHOST: postgres
-          PG_DATABASE: postgres
-          PG_USER: postgres
-          PG_PASS: postgres
-          # JWT Token
-          ACCESS_TOKEN_KEY: ad23d336053c8f225d3a62e0166447d96179ea7ae247eead634ba6d45e16edb1db8a7806c6be241c3075b1b40ef43889bc81884496108776097035189d379ae9
-          ACCESS_TOKEN_AGE: 1800
-          REFRESH_TOKEN_KEY: e87bbf49f4a7fae9184698880c677bb24bcd9f453ee9b6971261f4d0b45d2a3b5d6e96f7297ae42282644c8967ea27ffd9aa3da978b43b9a7c092f90a6b23f54
-    steps:
-    - name: checkout repository code
-      uses: actions/checkout@v2
-    - name: install dependencies
-      run: npm install
-    - name: configure db variables
-      run: |
-        sed -i -e "s|PGHOST=localhost|PGHOST=postgres|g" .env && \
-        sed -i -e "s|forum_api_dev|postgres|g" .env && \
-        sed -i -e "s|devel|postgres|g" .env && \
-        sed -i -e "s|secret|postgres|g" .env
-    - name: setup database
-      run: npm run migrate:latest
-      env:
-        PGHOST: postgres
-    - name: configure postman environment
-      run: |
-        sed -i -e "s|localhost|forum-api|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
-        sed -i -e "s|\"5000\"|${{ env.FORUM_API_PORT }}|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
-        cat "Forum API V1 Test/Forum API V1 Test.postman_environment.json"
-    - name: run postman
-      run: npm run test:postman
+#   postman-v1-test:
+# #     needs: build-and-publish
+#     needs: deploy
+#     permissions:
+#       contents: read
+#       packages: read
+#     runs-on: ubuntu-latest
+#     container: node:14.7.0
+#     services:
+#       # Label used to access the service container
+#       postgres:
+#         # Docker Hub image
+#         image: postgres
+#         # Provide the password for postgres
+#         env:
+#           POSTGRES_PASSWORD: postgres
+#         # Set health checks to wait until postgres has started
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+#       forum-api:
+#         image: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+#         credentials:
+#          username: ${{ github.actor }}
+#          password: ${{ secrets.GITHUB_TOKEN }}
+#         env:
+#           # nginx server
+#           PORT: ${{ env.FORUM_API_PORT }}
+#           # http server
+#           HOST: 0.0.0.0
+#           # database server
+#           PGHOST: postgres
+#           PG_DATABASE: postgres
+#           PG_USER: postgres
+#           PG_PASS: postgres
+#           # JWT Token
+#           ACCESS_TOKEN_KEY: ad23d336053c8f225d3a62e0166447d96179ea7ae247eead634ba6d45e16edb1db8a7806c6be241c3075b1b40ef43889bc81884496108776097035189d379ae9
+#           ACCESS_TOKEN_AGE: 1800
+#           REFRESH_TOKEN_KEY: e87bbf49f4a7fae9184698880c677bb24bcd9f453ee9b6971261f4d0b45d2a3b5d6e96f7297ae42282644c8967ea27ffd9aa3da978b43b9a7c092f90a6b23f54
+#     steps:
+#     - name: checkout repository code
+#       uses: actions/checkout@v2
+#     - name: install dependencies
+#       run: npm install
+#     - name: configure db variables
+#       run: |
+#         sed -i -e "s|PGHOST=localhost|PGHOST=postgres|g" .env && \
+#         sed -i -e "s|forum_api_dev|postgres|g" .env && \
+#         sed -i -e "s|devel|postgres|g" .env && \
+#         sed -i -e "s|secret|postgres|g" .env
+#     - name: setup database
+#       run: npm run migrate:latest
+#       env:
+#         PGHOST: postgres
+#     - name: configure postman environment
+#       run: |
+#         sed -i -e "s|localhost|forum-api|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
+#         sed -i -e "s|\"5000\"|${{ env.FORUM_API_PORT }}|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
+#         cat "Forum API V1 Test/Forum API V1 Test.postman_environment.json"
+#     - name: run postman
+#       run: npm run test:postman
       
   deploy:
-    needs: postman-v1-test
+#     needs: postman-v1-test
+    needs: [unit-and-integration-test, functional-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
