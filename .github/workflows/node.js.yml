@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  FORUM_API_PORT: 8080
 
 jobs:
   unit-and-integration-test:
@@ -130,8 +131,6 @@ jobs:
       contents: read
       packages: read
     runs-on: ubuntu-latest
-    env:
-      FORUM_API_PORT: 8080
     container: node:14.7.0
     services:
       # Label used to access the service container
