@@ -4,6 +4,8 @@ echo "NGINX_PORT: $PORT"
 
 sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
 
+cat /etc/nginx/conf.d/default.conf
+
 # Start the first process
 nginx -g 'daemon off;' &
   

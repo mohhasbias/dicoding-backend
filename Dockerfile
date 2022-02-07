@@ -5,7 +5,8 @@ ARG PORT
 ENV PORT $PORT
 
 RUN apt update && \
-    apt install -y nginx
+    apt install -y nginx && \
+    apt install -y sudo
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
@@ -51,8 +52,14 @@ COPY . /app
 # CMD PORT=5000 npm start
 
 COPY cmd-wrapper.sh cmd-wrapper.sh
-
 RUN /bin/bash -c 'chmod +x ./cmd-wrapper.sh'
 
+# RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
+
+# RUN adduser --disabled-password --gecos '' docker
+# RUN adduser docker sudo
+# RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# USER docker
 CMD ["/bin/bash", "-c", "./cmd-wrapper.sh"]
 EXPOSE $PORT
