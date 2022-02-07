@@ -151,9 +151,10 @@ jobs:
          username: ${{ github.actor }}
          password: ${{ secrets.GITHUB_TOKEN }}
         env:
+          # nginx server
+          PORT: 8080
           # http server
           HOST: 0.0.0.0
-          PORT: 5000
           # database server
           PGHOST: postgres
           PG_DATABASE: postgres
