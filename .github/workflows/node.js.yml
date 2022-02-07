@@ -130,6 +130,8 @@ jobs:
       contents: read
       packages: read
     runs-on: ubuntu-latest
+    env:
+      FORUM_API_PORT: 8080
     container: node:14.7.0
     services:
       # Label used to access the service container
@@ -152,7 +154,7 @@ jobs:
          password: ${{ secrets.GITHUB_TOKEN }}
         env:
           # nginx server
-          PORT: 8080
+          PORT: ${{FORUM_API_PORT}}
           # http server
           HOST: 0.0.0.0
           # database server
@@ -181,7 +183,9 @@ jobs:
         PGHOST: postgres
     - name: configure postman environment
       run: |
-        sed -i -e "s|localhost|forum-api|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json"
+        sed -i -e "s|localhost|forum-api|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
+        sed -i -e "s|\"5000\"|${{FORUM_API_PORT}}|g" "Forum API V1 Test/Forum API V1 Test.postman_environment.json" \
+        cat "Forum API V1 Test/Forum API V1 Test.postman_environment.json"
     - name: run postman
       run: npm run test:postman
       
