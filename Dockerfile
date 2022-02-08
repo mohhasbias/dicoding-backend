@@ -1,7 +1,7 @@
 FROM node:14.7.0
 
 # will be used as nginx port
-ARG PORT
+ARG PORT=9999
 ENV PORT $PORT
 
 RUN apt update && \
