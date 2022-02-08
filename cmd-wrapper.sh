@@ -2,6 +2,8 @@
 
 echo "NGINX_PORT: $PORT"
 
+cat /etc/nginx/nginx.conf | head
+
 sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
 
 cat /etc/nginx/conf.d/default.conf
