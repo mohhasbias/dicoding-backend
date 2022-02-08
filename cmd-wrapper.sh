@@ -9,7 +9,7 @@ sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
 cat /etc/nginx/conf.d/default.conf
 
 # Start the first process
-nginx -g 'daemon off;' &
+nginx &
   
 # Start the second process
 PORT=5000 npm start &
