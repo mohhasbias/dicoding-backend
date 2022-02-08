@@ -14,9 +14,9 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 RUN cat /etc/nginx/conf.d/default.conf
 
-RUN sed -i '/^user www-data;/i daemon off;' /etc/nginx/nginx.conf
+# RUN sed -i '/^user www-data;/i daemon off;' /etc/nginx/nginx.conf
 
-RUN cat /etc/nginx/nginx.conf | head
+# RUN cat /etc/nginx/nginx.conf | head
 
 ################################
 # get args from docker build
