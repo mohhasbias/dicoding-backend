@@ -1,24 +1,4 @@
-FROM node:14.7.0
-
-# will be used as nginx port
-ARG PORT=9999
-ENV PORT $PORT
-
-RUN apt update && \
-    apt install -y nginx && \
-    apt install -y sudo
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# RUN sed -i -e 's/$PORT/'"$PORT"'/g' /etc/nginx/conf.d/default.conf
-
-RUN cat /etc/nginx/conf.d/default.conf
-
-# RUN sed -i '/^user www-data;/i daemon off;' /etc/nginx/nginx.conf
-
-RUN sed -i '/^user www-data;/d' /etc/nginx/nginx.conf
-
-RUN cat /etc/nginx/nginx.conf | head
+FROM node:14.7.0 AS builder
 
 ################################
 # get args from docker build
@@ -55,17 +35,25 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install
 COPY . /app
-# CMD PORT=5000 npm start
+
+# build nodejs binaries
+RUN npm i -g pkg && pkg -t node14-linux-x64 src/index.js
+
+FROM nginx:1.20
+
+# will be used as nginx port
+ARG PORT=9999
+ENV PORT $PORT
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN cat /etc/nginx/conf.d/default.conf
+
+COPY --from=builder /app /app
+
+WORKDIR /app
 
 COPY cmd-wrapper.sh cmd-wrapper.sh
 RUN /bin/bash -c 'chmod +x ./cmd-wrapper.sh'
 
-# RUN useradd -m docker && echo "docker:docker" | chpasswd && adduser docker sudo
-
-# RUN adduser --disabled-password --gecos '' docker
-# RUN adduser docker sudo
-# RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-
-# USER docker
 CMD ["/bin/bash", "-c", "./cmd-wrapper.sh"]
 EXPOSE $PORT
