@@ -12,7 +12,9 @@ cat /etc/nginx/conf.d/default.conf
 nginx -g 'daemon off;' &
   
 # Start the second process
-PORT=5000 ./index &
+env
+
+PORT=5000 node src/index.js &
   
 # Wait for any process to exit
 # wait -n

@@ -1,8 +1,20 @@
 FROM node:14.7.0 AS builder
 
-################################
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . /app
+
+#------------------------------------
+
+FROM nginx:1.20
+
+RUN apt update && \
+    apt install -y nodejs
+
+#===============================
 # get args from docker build
-################################
+#===============================
 
 # http server
 ARG HOST
@@ -17,9 +29,9 @@ ARG ACCESS_TOKEN_KEY
 ARG ACCESS_TOKEN_AGE
 ARG REFRESH_TOKEN_KEY
 
-################################
+#===============================
 # copy args to env
-################################
+#===============================
 
 ENV HOST $HOST
 # ENV PORT 5000
@@ -30,16 +42,6 @@ ENV PG_PASS $PG_PASS
 ENV ACCESS_TOKEN_KEY $ACCESS_TOKEN_KEY
 ENV ACCESS_TOKEN_AGE $ACCESS_TOKEN_AGE
 ENV REFRESH_TOKEN_KEY $REFRESH_TOKEN_KEY 
-
-WORKDIR /app
-COPY package.json /app
-RUN npm install
-COPY . /app
-
-# build nodejs binaries
-RUN npm i -g pkg && pkg -t node14-linux-x64 src/index.js
-
-FROM nginx:1.20
 
 # will be used as nginx port
 ARG PORT=9999
