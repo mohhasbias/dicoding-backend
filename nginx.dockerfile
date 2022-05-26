@@ -1,4 +1,4 @@
-FROM nginx:1.20
+FROM nginx:stable
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
