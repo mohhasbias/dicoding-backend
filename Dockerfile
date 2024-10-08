@@ -7,7 +7,7 @@ COPY . /app
 
 #------------------------------------
 
-FROM nginx:1.20
+FROM nginx:latest
 
 RUN apt update && \
     apt install -y nodejs
